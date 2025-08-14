@@ -1,148 +1,353 @@
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  background: var(--dark);
-  color: var(--white);
-}
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--dark);
+      color: var(--white);
+    }
 
 /* Navbar/Header */
 .header {
-  background: var(--gray);
   border-bottom: 1px solid var(--light-gray);
   padding: 10px;
 }
-.breadcrumb {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+nav {
+      background: var(--dark);
+      border-bottom: 2px solid var(--cyan);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cyan); /* Ganti jadi cyan solid */
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .notification {
+      position: relative;
+      color: var(--yellow); /* Kuning solid untuk notif */
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #FF3B30;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    /* Button Kuning Solid */
+    .btn-report {
+      background: var(--yellow); /* Kuning solid */
+      color: var(--dark);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-report:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 235, 59, 0.4);
+    }
+
+    .user-avatar {
+      background: var(--light-gray);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan); /* Cyan solid */
+      cursor: pointer;
+    }
+
+    .breadcrumb {
+    margin-bottom: 20px;
+  }
+  
+  .breadcrumb ol {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    transition: color 0.2s;
+  }
+  
+  .breadcrumb a,
+.breadcrumb a * {
+  text-decoration: none !important;
 }
-.breadcrumb ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-.breadcrumb-item {
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.breadcrumb-item:hover {
-  color: var(--cyan);
-}
-.nav-icons {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.notification {
-  position: relative;
-}
-.notification-badge {
-  background: var(--cyan);
-  color: var(--dark);
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.7rem;
-  position: absolute;
-  top: -5px;
-  right: -8px;
-}
-.btn-report {
-  background: var(--cyan);
-  color: var(--dark);
-  padding: 5px 10px;
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.btn-report:hover {
-  opacity: 0.85;
+  
+  .breadcrumb-item:hover {
+    color: var(--yellow);
+  }
+  
+  .breadcrumb-item.active {
+    color: var(--cyan);
+  }
+  
+  .breadcrumb-item.current {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+  
+  .breadcrumb i.fa-home {
+    font-size: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .breadcrumb-item {
+      font-size: 16px;
+    }
+    
+    .breadcrumb-item.current {
+      font-size: 18px;
+    }
+  }
+
+main {
+  padding: 2rem;
 }
 
 /* Card Container */
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.card {
-  background: var(--gray);
-  border: 1px solid var(--light-gray);
-  border-radius: 6px;
-  padding: 1rem;
-  flex: 1 1 200px;
-}
-.card-header {
-  color: var(--yellow);
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-.card-item {
-  padding: 0.3rem 0;
-  border-bottom: 1px solid var(--light-gray);
-}
-.stats-card {
-  display: flex;
-  justify-content: space-between;
-  color: var(--white);
-}
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
 
-/* Search Card */
+    .card {
+      width: 280px;
+      background: var(--gray);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Header Card Cyan Solid */
+    .card-header {
+      padding: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      background: var(--cyan); /* Cyan solid */
+      color: var(--dark);
+    }
+
+    .card-item {
+      padding: 0.8rem 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+    }
+
+    .card-item:hover {
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+
+ /* Statistik Card */
+    .stats-card {
+      display: flex;
+    }
+
+    .stats-labels, .stats-values {
+      padding: 0.8rem;
+    }
+
+    .stats-labels {
+      flex: 1;
+      border-right: 1px solid rgba(0, 255, 255, 0.2);
+    }
+
+    .stats-values {
+      width: 60px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--yellow); /* Kuning solid */
+    }
+
+    /* Revised Search Card */
 .search-card {
-  text-align: center;
-  padding: 2rem 1rem;
-}
-.search-card i {
-  font-size: 2rem;
-  color: var(--cyan);
-}
-.label {
-  margin-top: 0.5rem;
-}
-
-/* Section: Belum Terpenuhi */
-.unfulfilled-section {
-  margin-top: 2rem;
-}
-.section-header {
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: var(--white);
-}
-.user-cards {
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.user-card {
-  background: var(--gray);
-  border: 1px solid var(--light-gray);
-  padding: 1rem;
-  border-radius: 6px;
-}
-.user-header {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: var(--yellow);
-}
-.user-date {
-  font-size: 0.9rem;
-  color: var(--cyan);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  background: var(--yellow);
+  color: var(--dark);
+  padding: 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(255, 235, 59, 0.2);
 }
 
-/* Footer */
-footer {
-  color: var(--white);
-  background: var(--gray);
-  border-top: 1px solid var(--light-gray);
-  text-align: center;
-  padding: 1rem;
-  font-size: 0.9rem;
-  margin-top: 2rem;
+.search-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(255, 235, 59, 0.3);
+  border-color: var(--cyan);
 }
+
+.search-card:active {
+  transform: scale(0.98);
+}
+
+.search-card i {
+  font-size: 2.2rem;
+  transition: transform 0.3s;
+}
+
+.search-card:hover i {
+  transform: scale(1.1);
+}
+
+.search-card div {
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 1.1rem;
+  position: relative;
+}
+
+/* Optional: Add a subtle cyan accent */
+.search-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.search-card:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-card {
+    padding: 1.2rem;
+    gap: 0.6rem;
+  }
+  
+  .search-card i {
+    font-size: 1.8rem;
+  }
+  
+  .search-card div {
+    font-size: 1rem;
+  }
+}
+
+    /* Belum Terpenuhi Section */
+    .unfulfilled-section {
+      background: var(--gray);
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .section-header {
+      padding: 0.8rem 1rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--cyan); /* Cyan solid */
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+    .user-cards {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+
+    /* User Card Border Cyan */
+    .user-card {
+      min-width: 140px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      border: 1px solid var(--cyan); /* Cyan solid */
+      overflow: hidden;
+    }
+
+    .user-header {
+      padding: 0.6rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--cyan); /* Cyan solid */
+      color: var(--cyan);
+      text-align: center;
+    }
+
+    .user-date {
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card {
+        width: 100%;
+      }
+      
+      nav {
+        padding: 1rem;
+      }
+      
+      .nav-icons {
+        gap: 1rem;
+      }
+    }
