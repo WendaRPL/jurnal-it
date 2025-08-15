@@ -65,24 +65,38 @@ function renderCards() {
     </div>
     <?php endif; ?>
 
-    <!-- Card Statistik Cepat (Semua Role) -->
-     <?php if ($role_id == 2 || $role_id == 3): ?>
-    <div class="card">
-        <div class="card-header">Statistik Cepat</div>
-        <div class="stats-card">
-            <div class="stats-labels">
-                <div class="py-1">Total Input</div>
-                <div class="py-1">Approved</div>
-                <div class="py-1">Pending</div>
-            </div>
-            <div class="stats-values">
-                <div class="py-1">50</div>
-                <div class="py-1">35</div>
-                <div class="py-1">15</div>
-            </div>
+    <!-- Card Statistik Cepat (Hanya SPV & User) -->
+<?php if ($role_id == 2 || $role_id == 3): ?>
+<?php
+    // Ambil statistik pakai mysqli
+    $sql = "
+        SELECT 
+            COUNT(*) AS total,
+            SUM(CASE WHEN approved = 1 THEN 1 ELSE 0 END) AS approved,
+            SUM(CASE WHEN approved = 0 THEN 1 ELSE 0 END) AS pending
+        FROM transaksi_harian
+        WHERE user_id = $user_id
+    ";
+    $result = mysqli_query($conn, $sql);
+    $stats = mysqli_fetch_assoc($result);
+?>
+<div class="card">
+    <div class="card-header">Statistik Cepat</div>
+    <div class="stats-card">
+        <div class="stats-labels">
+            <div>Total Input</div>
+            <div>Approved</div>
+            <div>Pending</div>
+        </div>
+        <div class="stats-values">
+            <div><?= $stats['total'] ?? 0 ?></div>
+            <div><?= $stats['approved'] ?? 0 ?></div>
+            <div><?= $stats['pending'] ?? 0 ?></div>
         </div>
     </div>
-    <?php endif; ?>
+</div>
+<?php endif; ?>
+
 
     <!-- Button Vertikal untuk SPV & User -->
     <?php if ($role_id == 2 || $role_id == 3): ?>
