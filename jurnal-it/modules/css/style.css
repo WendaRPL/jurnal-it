@@ -6,6 +6,10 @@
     }
 
     body {
+      width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
       background-color: var(--dark);
       color: var(--white);
     }
@@ -148,17 +152,94 @@ main {
   padding: 2rem;
 }
 
+.main-content {
+  flex-grow: 1; /* Biar footer tetap di bawah */
+}
+
+/* Ganti CSS sebelumnya dengan ini */
+.reports-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 1rem; /* kasih jarak isi biar lega */
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* jarak antar laporan */
+  background: rgba(255, 255, 255, 0.02); /* sedikit kontras biar gak monoton */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reports-container.empty {
+  justify-content: center;
+  align-items: center;
+  color: var(--light-gray);
+  font-style: italic;
+}
+
+.report-item {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  flex-shrink: 0; /* Biar ga kepress */
+}
+
+.report-status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.report-status.pending {
+  background: rgba(255, 235, 59, 0.2);
+  color: var(--yellow);
+}
+
+.report-status.approved {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+/* Pastikan card punya height yang fix */
+.card {
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  flex-shrink: 0; /* Header tetap di atas */
+}
+
+/* Perbaikan scrollbar */
+.reports-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reports-container::-webkit-scrollbar-thumb {
+  background: var(--cyan);
+  border-radius: 4px;
+}
+
+.reports-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Tambahan untuk konten kosong */
+.report-item:last-child {
+  border-bottom: none;
+}
+
 /* Card Container */
 .card-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.5rem;
+      gap: 2rem;
       justify-content: center;
       margin-bottom: 2rem;
     }
 
     .card {
-      width: 280px;
+      width: 400px;
       background: var(--gray);
       border-radius: 10px;
       overflow: hidden;
@@ -179,24 +260,78 @@ main {
       color: var(--dark);
     }
 
+    .card-item i {
+  margin-right: 8px; /* Jarak kanan icon */
+  font-size: 14px;   /* Ukuran icon */
+}
+
     .card-item {
-      padding: 0.8rem 1rem;
+      padding: 0.8rem;
+      margin: 0.2rem;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
       cursor: pointer;
+      color: var(--white);
+      display: flex;           /* Tambahkan ini */
+    justify-content: center; /* Biar text benar-benar center */
+    align-items: center;     /* Vertikal center juga */
+    min-height: 40px;        /* Biar konsisten tinggi card-nya */
+    text-decoration: none !important; /* Hilangkan underline */
     }
 
     .card-item:hover {
       background: rgba(0, 255, 255, 0.05);
+      transform: scale(1.02);  /* Sedikit zoom in */
     }
 
+    /* Hilangkan underline di SEMUA link card */
+.card-link {
+  text-decoration: none !important;
+}
+
+/* Button compact */
+.search-card.compact {
+  height: 80px; /* Tinggi yang lebih compact */
+  padding: 0.8rem; /* Padding lebih kecil */
+}
+
+/* Container untuk button vertikal */
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* Jarak antara button */
+  width: 100%;
+  max-width: 280px; /* Sesuaikan dengan lebar card lainnya */
+}
+
+/* Pastikan card dalam container vertikal memiliki lebar penuh */
+.vertical-buttons .search-card {
+  width: 100%;
+transition: transform 0.2s ease;
+}
+
+.vertical-buttons .search-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Penyesuaian icon dan text */
+.search-card.compact i {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.search-card.compact .label {
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
 
  /* Statistik Card */
     .stats-card {
       display: flex;
+      padding: 1rem;
     }
 
     .stats-labels, .stats-values {
-      padding: 0.8rem;
+      padding: 0.5rem 1rem;
     }
 
     .stats-labels {
@@ -205,7 +340,7 @@ main {
     }
 
     .stats-values {
-      width: 60px;
+      width: 80px;
       text-align: center;
       font-weight: 700;
       color: var(--yellow); /* Kuning solid */
@@ -279,9 +414,14 @@ main {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .search-card {
-    padding: 1.2rem;
+    padding: 0.5rem;
     gap: 0.6rem;
   }
+
+  .card-item {
+        padding: 0.6rem 0;
+        font-size: 0.95rem;
+    }
   
   .search-card i {
     font-size: 1.8rem;
@@ -351,3 +491,15 @@ main {
         gap: 1rem;
       }
     }
+  
+   .footer {
+  position: relative;
+  bottom: 0;
+  margin-top:350px;
+  width: 100%; /* Wajib! */
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  background: var(--dark); /* Biar keliatan */
+  border-top: 1px solid var(--cyan); /* Optional */
+}
