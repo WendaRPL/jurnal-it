@@ -158,7 +158,7 @@ main {
 
 /* Ganti CSS sebelumnya dengan ini */
 .reports-container {
-  max-height: 300px;
+  max-height: 250px;
   overflow-y: auto;
   padding: 1rem; /* kasih jarak isi biar lega */
   display: flex;
@@ -176,11 +176,35 @@ main {
 }
 
 .report-item {
-  padding: 0.8rem 1rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr; /* 4 kolom */
+  padding: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   transition: background 0.2s ease;
   flex-shrink: 0; /* Biar ga kepress */
+}
+
+.report-item:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+.report-title {
+    font-weight: bold;
+    grid-column: 1 / span 4;
+}
+
+.report-meta {
+    grid-column: 1 / span 3;
+    font-size: 12px;
+    color: #bbb;
+}
+
+.report-type {
+    grid-column: 4;
+    font-size: 12px;
+    color: #0ff;
+    text-align: right;
 }
 
 .report-status {
@@ -290,7 +314,7 @@ main {
 
 /* Button compact */
 .search-card.compact {
-  height: 80px; /* Tinggi yang lebih compact */
+  height: 142px; /* Tinggi yang lebih compact */
   padding: 0.8rem; /* Padding lebih kecil */
 }
 
@@ -326,23 +350,29 @@ transition: transform 0.2s ease;
 
  /* Statistik Card */
     .stats-card {
-      display: flex;
-      padding: 1rem;
+      display: grid;
+      grid-template-columns: 1fr auto;  
+      row-gap: 10px;
+      padding: 14px 18px;
+      align-items: center;
     }
 
     .stats-labels, .stats-values {
-      padding: 0.5rem 1rem;
+      padding: 4px 0;
+      font-size: 16px;
+      line-height: 1.5;
     }
 
     .stats-labels {
       flex: 1;
       border-right: 1px solid rgba(0, 255, 255, 0.2);
+      text-align: left;
     }
 
     .stats-values {
       width: 80px;
-      text-align: center;
-      font-weight: 700;
+      text-align: right;
+      font-weight: bold;
       color: var(--yellow); /* Kuning solid */
     }
 
@@ -495,7 +525,7 @@ transition: transform 0.2s ease;
    .footer {
   position: relative;
   bottom: 0;
-  margin-top:350px;
+  margin-top:250px;
   width: 100%; /* Wajib! */
   text-align: center;
   padding: 1rem;
