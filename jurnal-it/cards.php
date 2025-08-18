@@ -15,7 +15,7 @@ function renderCards() {
         <div class="card-header">Laporan Terbaru</div>
         <div class="reports-container">
             <?php
-            // Ambil 5 laporan terbaru milik user ini
+            // Ambil 7 laporan terbaru milik user ini
             $sql = "
                 SELECT 
                     th.id,
@@ -73,7 +73,7 @@ function renderCards() {
         SELECT 
             COUNT(*) AS total,
             SUM(CASE WHEN approved = 1 THEN 1 ELSE 0 END) AS approved,
-            SUM(CASE WHEN approved = 0 THEN 1 ELSE 0 END) AS pending
+            SUM(CASE WHEN approved IS NULL OR approved = 0 THEN 1 ELSE 0 END) AS pending
         FROM transaksi_harian
         WHERE user_id = $user_id
     ";
@@ -117,8 +117,47 @@ function renderCards() {
     </div>
     <?php endif; ?>
 
-    <!-- User Management (Khusus Admin) -->
-    <?php if ($role_id == 1): ?>
+    <!-- User Management & User Online (Khusus Admin) -->
+     <?php if ($role_id == 1): ?>
+<?php
+    // Update status user sebelum ambil data
+    $conn->query("
+        UPDATE User 
+        SET status = 'idle' 
+        WHERE last_online_datetime < NOW() - INTERVAL 5 MINUTE 
+          AND last_online_datetime >= NOW() - INTERVAL 15 MINUTE
+    ");
+    $conn->query("
+        UPDATE User 
+        SET status = 'offline' 
+        WHERE last_online_datetime < NOW() - INTERVAL 15 MINUTE
+    ");
+
+    // Ambil statistik user online/idle/offline
+    $resultUser = $conn->query("
+        SELECT 
+            SUM(status='online')  AS online_users,
+            SUM(status='idle')    AS idle_users,
+            SUM(status='offline') AS offline_users
+        FROM User
+    ");
+    $userStats = $resultUser->fetch_assoc();
+?>
+<div class="card">
+  <div class="card-header">User Status</div>
+  <div class="stats-card">
+    <div class="stats-labels">
+      <div>Online</div>
+      <div>Idle</div>
+      <div>Offline</div>
+    </div>
+    <div class="stats-values">
+      <div><?= $userStats['online_users'] ?? 0 ?></div>
+      <div><?= $userStats['idle_users'] ?? 0 ?></div>
+      <div><?= $userStats['offline_users'] ?? 0 ?></div>
+    </div>
+  </div>
+</div>
     <a href="user_management.php" class="card-link" aria-label="Kelola Pengguna">
         <div class="card search-card">User Management</div>
     </a>
