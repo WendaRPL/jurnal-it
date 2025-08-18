@@ -12,7 +12,7 @@ renderHeader("Home - Jurnal IT");
   <?php renderNavbar(); ?>
   <main>
     <?php renderCards(); ?>
-    <?php renderUnfulfilledSection(); ?>
+    <?php renderUnfulfilledSection($conn); ?>
   </main>
   <?php renderFooter(); ?>
 </body>
