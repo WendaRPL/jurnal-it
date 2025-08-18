@@ -1,5 +1,16 @@
 <?php
 session_start();
+require_once "config.php"; // koneksi ke database lu
+
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+
+    // Update status user jadi offline
+    $stmt = $conn->prepare("UPDATE user SET status = 'offline' WHERE id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $stmt->close();
+}
 
 // Hapus semua session
 $_SESSION = [];
