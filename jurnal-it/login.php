@@ -25,6 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["role_id"] = $user["role_id"];
                 $_SESSION["name"] = $user["name"];
 
+                // Update last_online_datetime saat login sukses
+                $update = $conn->prepare("UPDATE User SET last_online_datetime = NOW() WHERE id = ?");
+                $update->bind_param("i", $user["id"]);
+                $update->execute();
+                $update->close();
+
                 // Redirect sesuai role
                 if ($user["role_id"] == 1) {
                     header("Location: home.php");
