@@ -1,6 +1,15 @@
 <?php
 function renderNavbar() {
-  $role_id = $_SESSION['role_id'] ?? 0; // Cek role user
+    $role_id = $_SESSION['role_id'] ?? 0; // Cek role user
+
+    // Mapping role id → nama dan warna
+    $roles = [
+        1 => ["name" => "Admin", "color" => "#ff4d4d"],    // merah
+        2 => ["name" => "Supervisor", "color" => "#4d79ff"],  // biru
+        3 => ["name" => "Staff", "color" => "#33cc33"],    // hijau
+    ];
+    $roleName = $roles[$role_id]['name'] ?? "User";
+    $roleColor = $roles[$role_id]['color'] ?? "#aaaaaa"; // abu default
 ?>
 <div class="header">
   <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -17,18 +26,20 @@ function renderNavbar() {
         <i class="fas fa-bell fa-lg"></i>
         <span class="notification-badge">1</span>
       </div>
-      
 
-      <!-- User Dropdown -->
-      <div class="user-dropdown">
-        <div class="user-avatar" onclick="toggleUserMenu()">
-          <i class="fas fa-user"></i>
-        </div>
-        <div class="user-menu" id="userMenu">
-          <p>Halo, <?php echo $_SESSION['name'] ?? 'User'; ?></p>
-          <a href="profile.php"><i class="fas fa-id-card"></i> Profil</a>
-          <hr>
-          <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <!-- User info di navbar -->
+      <div class="user-info" style="display:flex; align-items:center; gap:10px;">
+        <span style="color:<?php echo $roleColor; ?>; font-weight:bold;"><?php echo $roleName; ?></span>
+        <div class="user-dropdown">
+          <div class="user-avatar" onclick="toggleUserMenu()">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-menu" id="userMenu">
+            <p>Halo, <?php echo $_SESSION['name'] ?? 'User'; ?></p>
+            <a href="profile.php"><i class="fas fa-id-card"></i> Profil</a>
+            <hr>
+            <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
         </div>
       </div>
     </div>
