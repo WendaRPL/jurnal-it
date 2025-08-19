@@ -134,4 +134,3 @@ function renderUnfulfilledSection($conn) {
     </script>
 <?php
 }
-?>

@@ -7,9 +7,9 @@
 
     body {
       width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       background-color: var(--dark);
       color: var(--white);
     }
@@ -92,6 +92,7 @@ nav {
 
     .breadcrumb {
     margin-bottom: 20px;
+    padding-bottom: 15px;
   }
   
   .breadcrumb ol {
@@ -128,7 +129,7 @@ nav {
   }
   
   .breadcrumb-item.current {
-    color: var(--yellow);
+    color: var(--white);
     font-weight: 700;
     font-size: 20px;
   }
@@ -158,9 +159,9 @@ main {
 
 /* Ganti CSS sebelumnya dengan ini */
 .reports-container {
-  max-height: 250px;
+  max-height: 400px;
   overflow-y: auto;
-  padding: 1rem; /* kasih jarak isi biar lega */
+  color: var(--white) !important;
   display: flex;
   flex-direction: column;
   gap: 0.8rem; /* jarak antar laporan */
@@ -177,6 +178,7 @@ main {
 
 .report-item {
   display: grid;
+  color: var(--white) !important;
   grid-template-columns: 2fr 1fr 1fr 1fr; /* 4 kolom */
   padding: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -191,6 +193,7 @@ main {
 
 .report-title {
     font-weight: bold;
+    color: var(--white) !important;
     grid-column: 1 / span 4;
 }
 
@@ -228,6 +231,7 @@ main {
   max-height: 300px;
   display: flex;
   flex-direction: column;
+  color: var(--white);
 }
 
 .card-header {
@@ -353,14 +357,14 @@ transition: transform 0.2s ease;
       display: grid;
       grid-template-columns: 1fr auto;  
       row-gap: 10px;
-      padding: 14px 18px;
+      padding: 15px 20px;
       align-items: center;
     }
 
     .stats-labels, .stats-values {
-      padding: 4px 0;
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.8rem;
+      text-align: center;
     }
 
     .stats-labels {
@@ -370,8 +374,10 @@ transition: transform 0.2s ease;
     }
 
     .stats-values {
-      width: 80px;
-      text-align: right;
+      width: 25px;
+      padding-left: 18px;
+      text-align: center;
+      justify-content: center;
       font-weight: bold;
       color: var(--yellow); /* Kuning solid */
     }
@@ -473,6 +479,7 @@ transition: transform 0.2s ease;
     .section-header {
       padding: 0.8rem 1rem;
       font-weight: 600;
+      text-align: start;
       border-bottom: 2px solid var(--cyan); /* Cyan solid */
       background: rgba(0, 255, 255, 0.05);
     }
@@ -506,6 +513,118 @@ transition: transform 0.2s ease;
       text-align: center;
       font-size: 0.9rem;
     }
+
+    /* User Management section */
+.user-management-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-management-table th,
+.user-management-table td {
+  padding: 15px 25px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-management-table th {
+  background-color: rgba(0, 255, 255, 0.1);
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.user-management-table tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+.user-management-table tr:hover {
+  background-color: rgba(0, 255, 255, 0.05);
+}
+
+.user-management-table button {
+  margin: 0 auto;
+  display: block;
+}
+
+.action-column {
+  width: 100px;
+  text-align: center !important;
+}
+
+.action-cell {
+  text-align: center;
+  padding: 8px 5px !important;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-btn {
+  background-color: var(--cyan);
+  color: var(--dark);
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: var(--dark);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.search-item {
+  align-items: center;
+  height: 40px;
+}
+
+.search-input {
+  height: 100%;
+  width: 140px;
+  padding: 0 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--cyan);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  color: var(--white);
+  outline: none;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6); /* Warna placeholder lebih transparan */
+  font-size: 0.85rem; /* Ukuran placeholder lebih kecil */
+  font-style: italic; /* Gaya miring untuk placeholder */
+}
+
+.search-input:focus {
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 2px rgba(255,235,59,0.2);
+}
+
+.search-btn {
+  height: 20%;
+  width: 40px;
+  background: var(--cyan);
+  color: var(--dark);
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: medium;
+}
+
+.search-btn:hover {
+  background: var(--yellow);
+}
 
     /* Modal */
 .modal {
@@ -575,7 +694,7 @@ transition: transform 0.2s ease;
         gap: 1rem;
       }
     }
-  
+
    .footer {
   position: relative;
   bottom: 0;
