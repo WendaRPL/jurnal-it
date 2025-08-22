@@ -1,12 +1,15 @@
 <?php
 require_once "config.php"; // koneksi database
 
-function renderCards() {
     global $conn; // koneksi dari config.php
 
     $role_id = $_SESSION['role_id'] ?? 0;
     $user_id = $_SESSION['user_id'] ?? 0;
 ?>
+
+<link rel="stylesheet" href="modules/css/cards.css">
+<link rel="stylesheet" href="modules/css/reports.css">
+
 <div class="card-container">
 
     <?php if ($role_id == 2 || $role_id == 3): ?>
@@ -158,12 +161,9 @@ function renderCards() {
     </div>
   </div>
 </div>
-    <a href="user_management.php" class="card-link" aria-label="Kelola Pengguna">
+    <a href="user_manage.php" class="card-link" aria-label="Kelola Pengguna">
         <div class="card search-card">User Management</div>
     </a>
     <?php endif; ?>
 
 </div>
-<?php
-}
-?>
