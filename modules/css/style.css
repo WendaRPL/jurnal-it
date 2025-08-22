@@ -1,0 +1,709 @@
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--dark);
+      color: var(--white);
+    }
+
+/* Navbar/Header */
+.header {
+  border-bottom: 1px solid var(--light-gray);
+  padding: 10px;
+}
+nav {
+      background: var(--dark);
+      border-bottom: 2px solid var(--cyan);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cyan); /* Ganti jadi cyan solid */
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .notification {
+      position: relative;
+      color: var(--yellow); /* Kuning solid untuk notif */
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #FF3B30;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    /* Button Kuning Solid */
+    .btn-report {
+      background: var(--yellow); /* Kuning solid */
+      color: var(--dark);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-report:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 235, 59, 0.4);
+    }
+
+    .user-avatar {
+      background: var(--light-gray);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan); /* Cyan solid */
+      cursor: pointer;
+    }
+
+    .breadcrumb {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+  }
+  
+  .breadcrumb ol {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    transition: color 0.2s;
+  }
+  
+  .breadcrumb a,
+.breadcrumb a * {
+  text-decoration: none !important;
+}
+  
+  .breadcrumb-item:hover {
+    color: var(--yellow);
+  }
+  
+  .breadcrumb-item.active {
+    color: var(--cyan);
+  }
+  
+  .breadcrumb-item.current {
+    color: var(--white);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+  
+  .breadcrumb i.fa-home {
+    font-size: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .breadcrumb-item {
+      font-size: 16px;
+    }
+    
+    .breadcrumb-item.current {
+      font-size: 18px;
+    }
+  }
+
+main {
+  padding: 2rem;
+}
+
+.main-content {
+  flex-grow: 1; /* Biar footer tetap di bawah */
+}
+
+/* Ganti CSS sebelumnya dengan ini */
+.reports-container {
+  max-height: 400px;
+  overflow-y: auto;
+  color: var(--white) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* jarak antar laporan */
+  background: rgba(255, 255, 255, 0.02); /* sedikit kontras biar gak monoton */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reports-container.empty {
+  justify-content: center;
+  align-items: center;
+  color: var(--light-gray);
+  font-style: italic;
+}
+
+.report-item {
+  display: grid;
+  color: var(--white) !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr; /* 4 kolom */
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  flex-shrink: 0; /* Biar ga kepress */
+}
+
+.report-item:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+.report-title {
+    font-weight: bold;
+    color: var(--white) !important;
+    grid-column: 1 / span 4;
+}
+
+.report-meta {
+    grid-column: 1 / span 3;
+    font-size: 12px;
+    color: #bbb;
+}
+
+.report-type {
+    grid-column: 4;
+    font-size: 12px;
+    color: #0ff;
+    text-align: right;
+}
+
+.report-status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.report-status.pending {
+  background: rgba(255, 235, 59, 0.2);
+  color: var(--yellow);
+}
+
+.report-status.approved {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+/* Pastikan card punya height yang fix */
+.card {
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+  color: var(--white);
+}
+
+.card-header {
+  flex-shrink: 0; /* Header tetap di atas */
+}
+
+/* Perbaikan scrollbar */
+.reports-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reports-container::-webkit-scrollbar-thumb {
+  background: var(--cyan);
+  border-radius: 4px;
+}
+
+.reports-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Tambahan untuk konten kosong */
+.report-item:last-child {
+  border-bottom: none;
+}
+
+/* Card Container */
+.card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      width: 400px;
+      background: var(--gray);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Header Card Cyan Solid */
+    .card-header {
+      padding: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      background: var(--cyan); /* Cyan solid */
+      color: var(--dark);
+    }
+
+    .card-item i {
+  margin-right: 8px; /* Jarak kanan icon */
+  font-size: 14px;   /* Ukuran icon */
+}
+
+    .card-item {
+      padding: 0.8rem;
+      margin: 0.2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      color: var(--white);
+      display: flex;           /* Tambahkan ini */
+    justify-content: center; /* Biar text benar-benar center */
+    align-items: center;     /* Vertikal center juga */
+    min-height: 40px;        /* Biar konsisten tinggi card-nya */
+    text-decoration: none !important; /* Hilangkan underline */
+    }
+
+    .card-item:hover {
+      background: rgba(0, 255, 255, 0.05);
+      transform: scale(1.02);  /* Sedikit zoom in */
+    }
+
+    /* Hilangkan underline di SEMUA link card */
+.card-link {
+  text-decoration: none !important;
+}
+
+/* Button compact */
+.search-card.compact {
+  height: 142px; /* Tinggi yang lebih compact */
+  padding: 0.8rem; /* Padding lebih kecil */
+}
+
+/* Container untuk button vertikal */
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* Jarak antara button */
+  width: 100%;
+  max-width: 280px; /* Sesuaikan dengan lebar card lainnya */
+}
+
+/* Pastikan card dalam container vertikal memiliki lebar penuh */
+.vertical-buttons .search-card {
+  width: 100%;
+transition: transform 0.2s ease;
+}
+
+.vertical-buttons .search-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Penyesuaian icon dan text */
+.search-card.compact i {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.search-card.compact .label {
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+ /* Statistik Card */
+    .stats-card {
+      display: grid;
+      grid-template-columns: 1fr auto;  
+      row-gap: 10px;
+      padding: 15px 20px;
+      align-items: center;
+    }
+
+    .stats-labels, .stats-values {
+      font-size: 16px;
+      line-height: 1.8rem;
+      text-align: center;
+    }
+
+    .stats-labels {
+      flex: 1;
+      border-right: 1px solid rgba(0, 255, 255, 0.2);
+      text-align: left;
+    }
+
+    .stats-values {
+      width: 25px;
+      padding-left: 18px;
+      text-align: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--yellow); /* Kuning solid */
+    }
+
+    /* Revised Search Card */
+.search-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  background: var(--yellow);
+  color: var(--dark);
+  padding: 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(255, 235, 59, 0.2);
+}
+
+.search-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(255, 235, 59, 0.3);
+  border-color: var(--cyan);
+}
+
+.search-card:active {
+  transform: scale(0.98);
+}
+
+.search-card i {
+  font-size: 2.2rem;
+  transition: transform 0.3s;
+}
+
+.search-card:hover i {
+  transform: scale(1.1);
+}
+
+.search-card div {
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+  font-size: 1.1rem;
+  position: relative;
+}
+
+/* Optional: Add a subtle cyan accent */
+.search-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.search-card:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-card {
+    padding: 0.5rem;
+    gap: 0.6rem;
+  }
+
+  .card-item {
+        padding: 0.6rem 0;
+        font-size: 0.95rem;
+    }
+  
+  .search-card i {
+    font-size: 1.8rem;
+  }
+  
+  .search-card div {
+    font-size: 1rem;
+  }
+}
+
+    /* Belum Terpenuhi Section */
+    .unfulfilled-section {
+      background: var(--gray);
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .section-header {
+      padding: 0.8rem 1rem;
+      font-weight: 600;
+      text-align: start;
+      border-bottom: 2px solid var(--cyan); /* Cyan solid */
+      background: rgba(0, 255, 255, 0.05);
+    }
+
+    .user-cards {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+
+    /* User Card Border Cyan */
+    .user-card {
+      min-width: 140px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      border: 1px solid var(--cyan); /* Cyan solid */
+      overflow: hidden;
+    }
+
+    .user-header {
+      padding: 0.6rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--cyan); /* Cyan solid */
+      color: var(--cyan);
+      text-align: center;
+    }
+
+    .user-date {
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* User Management section */
+.user-management-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-management-table th,
+.user-management-table td {
+  padding: 15px 25px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-management-table th {
+  background-color: rgba(0, 255, 255, 0.1);
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.user-management-table tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+.user-management-table tr:hover {
+  background-color: rgba(0, 255, 255, 0.05);
+}
+
+.user-management-table button {
+  margin: 0 auto;
+  display: block;
+}
+
+.action-column {
+  width: 100px;
+  text-align: center !important;
+}
+
+.action-cell {
+  text-align: center;
+  padding: 8px 5px !important;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-btn {
+  background-color: var(--cyan);
+  color: var(--dark);
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: var(--dark);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.search-item {
+  align-items: center;
+  height: 40px;
+}
+
+.search-input {
+  height: 100%;
+  width: 140px;
+  padding: 0 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--cyan);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  color: var(--white);
+  outline: none;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6); /* Warna placeholder lebih transparan */
+  font-size: 0.85rem; /* Ukuran placeholder lebih kecil */
+  font-style: italic; /* Gaya miring untuk placeholder */
+}
+
+.search-input:focus {
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 2px rgba(255,235,59,0.2);
+}
+
+.search-btn {
+  height: 20%;
+  width: 40px;
+  background: var(--cyan);
+  color: var(--dark);
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: medium;
+}
+
+.search-btn:hover {
+  background: var(--yellow);
+}
+
+    /* Modal */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--gray);
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  color: #fff;
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--cyan);
+}
+
+.table-missing {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.table-missing th, 
+.table-missing td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--cyan);
+  text-align: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card {
+        width: 100%;
+      }
+      
+      nav {
+        padding: 1rem;
+      }
+      
+      .nav-icons {
+        gap: 1rem;
+      }
+    }
+
+   .footer {
+  position: relative;
+  bottom: 0;
+  margin-top:250px;
+  width: 100%; /* Wajib! */
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  background: var(--dark); /* Biar keliatan */
+  border-top: 1px solid var(--cyan); /* Optional */
+}
+
