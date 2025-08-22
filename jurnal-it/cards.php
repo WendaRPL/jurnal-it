@@ -111,7 +111,7 @@ require_once "config.php"; // koneksi database
             </div>
         </a>
         
-        <a href="input.php" class="card-link" aria-label="Buat Laporan">
+        <a href="input_report.php" class="card-link" aria-label="Buat Laporan">
             <div class="search-card compact">
                 <i class="fas fa-plus"></i>
                 <div class="label">Buat Laporan</div>

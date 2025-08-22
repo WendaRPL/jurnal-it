@@ -18,8 +18,7 @@
         $stmt->execute();
         $users = $stmt->get_result();
     } else {
-        return; // role lain ga boleh akses
-        
+        return; // role lain ga boleh akses     
     }
 
     $today = new DateTime(); // ini harus ada, tadi lupa
