@@ -86,7 +86,7 @@ ob_start(); // mulai output buffering
                         </div>
                         
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Kirim</button>
+                            <button type="submit" class="btn-primary">Kirim</button>
                         </div>
                     </form>
                 </div>
@@ -120,7 +120,7 @@ ob_start(); // mulai output buffering
                         </div>
                         
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Kirim</button>
+                            <button type="submit" class="btn-primary">Kirim</button>
                         </div>
                     </form>
                 </div>

@@ -95,7 +95,7 @@ input[type="date"], input[type="time"] {
     width: 65px;
     padding-top: 2;
     font-size: 15px;
-    border-radius: 9px;
+    border-radius: px;
     border-color: cyan;
     color: var(--cyan);
     background-color: var(--dark);
