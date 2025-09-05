@@ -1,0 +1,265 @@
+/* ===================== */
+/* Custom Input Laporan  */
+/* ===================== */
+
+/* General Container */
+.container {
+    padding: 20px;
+}
+
+/* Card Style */
+.input-section {
+    background: #111;
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.section-header {
+    background: #0d0d0d;
+    color: yellow;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #00ffff;
+}
+
+.section-content {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+/* Form */
+.form-label {
+    color: #00ffff;
+    font-weight: 500;
+}
+
+/* Form */
+.form-control, 
+.form-select,
+.flatpickr-input{
+    background-color: #000;
+    border: 1px solid #00ffff;
+    color: #fff !important; /* teks putih biar kontras */
+    height: calc(2.25rem + 2px);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #00ffea;
+    box-shadow: 0 0 8px #00ffff88;
+    background: #000 !important;
+}
+
+/* Placeholder style biar putih */
+.form-control::placeholder,
+.form-select::placeholder,
+.flatpickr-input::placeholder {
+  color: #fff !important;
+  opacity: 0.6; /* biar agak beda sama text biasa */
+}
+
+/* Kalau pengen glow sedikit pas focus */
+.form-control:focus::placeholder,
+.form-select:focus::placeholder,
+.flatpickr-input:focus::placeholder {
+  color: #00ffff !important;
+  opacity: 0.8;
+}
+
+
+/* Dropdown Option */
+.form-select option {
+    background-color: #111; /* background dropdown */
+    color: #fff;            /* teks putih */
+}
+
+.form-select option:disabled {
+    color: #888;            /* placeholder abu-abu */
+}
+
+
+/* Input group untuk tanggal & waktu */
+.date-group {
+    cursor: pointer;
+}
+
+.date-group .input-group-text {
+    background: #000;
+    border: 1px solid #00ffff;
+    color: #00ffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(2.25rem + 2px);
+}
+
+.date-group input {
+    background: #000;
+    border: 1px solid #00ffff;
+    color: #fff;
+    height: calc(2.25rem + 2px);
+}
+
+/* Button */
+.btn-primary {
+    background: #00ffff;
+    border: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #0077ff;
+    box-shadow: 0 0 15px #0077ff;
+}
+
+/* ===================== */
+/* Flatpickr Overrides   */
+/* ===================== */
+
+/* Input field (form) */
+.flatpickr-input.form-control {
+  background-color: #000 !important;
+  border: 1px solid #00ffff !important;
+  color: #fff !important;
+  height: calc(2.25rem + 2px) !important;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 6px;
+}
+
+/* Calendar container */
+.flatpickr-calendar {
+  background: #111 !important;
+  border: 1px solid #00ffff !important;
+  color: #fff !important;
+  box-shadow: 0 0 15px #00ffff55 !important;
+}
+
+/* Header (bulan/tahun) */
+.flatpickr-calendar .flatpickr-current-month {
+  color: #fff !important;
+}
+
+.flatpickr-calendar .flatpickr-current-month .cur-month,
+.flatpickr-calendar .flatpickr-current-month .numInput.cur-year {
+  color: #00ffff !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Dropdown bulan (kalau aktif) */
+.flatpickr-calendar .flatpickr-monthDropdown-months {
+  background: #111 !important;
+  color: #fff !important;
+  border: 1px solid #00ffff !important;
+}
+.flatpickr-calendar .flatpickr-monthDropdown-months option {
+  background: #111 !important;
+  color: #fff !important;
+}
+
+/* Panah navigasi bulan */
+.flatpickr-calendar .flatpickr-prev-month svg,
+.flatpickr-calendar .flatpickr-next-month svg {
+  fill: #00ffff !important;
+}
+.flatpickr-calendar .flatpickr-prev-month:hover svg,
+.flatpickr-calendar .flatpickr-next-month:hover svg {
+  fill: #ffd400 !important;
+}
+
+/* Days */
+.flatpickr-day {
+  color: #fff !important;
+}
+.flatpickr-day.today {
+  border-color: #00ffff !important;
+  color: #00ffff !important;
+}
+.flatpickr-day.selected {
+  background: #00ffff !important;
+  color: #000 !important;
+}
+
+.flatpickr-day:hover {
+  background:   rgb(0, 166, 255) !important;
+  color: #fff !important;
+}
+
+.flatpickr-weekday {
+  color: #00ffff !important;
+}
+
+.flatpickr-input:focus {
+    background: #000 !important;
+}
+
+.notif {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #fff;
+  background: #111;
+  border: 2px solid #00ffff;
+  box-shadow: 0 0 15px #00ffff55;
+  z-index: 9999;
+  animation: slideIn 0.4s ease, fadeOut 0.5s ease 3s forwards;
+  overflow: hidden;
+}
+
+/* Animasi border neon ngalir */
+.notif::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  padding: 2px;
+  background-size: 300% 300%;
+  animation: neon-flow 4s linear infinite;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Status: Created (Hijau Neon) */
+.notif.created::before {
+  background: linear-gradient(90deg, #00ffcc, #00ff66, #00ffcc, #00ff66);
+}
+
+/* Status: Updated (Biru Neon) */
+.notif.updated::before {
+  background: linear-gradient(90deg, #00ffff, #0077ff, #00ffff, #0077ff);
+}
+
+/* Status: Deleted (Merah Neon) */
+.notif.deleted::before {
+  background: linear-gradient(90deg, #ff004c, #ff1a75, #ff004c, #ff1a75);
+}
+
+/* Status: Invalid Request (Kuning/Orange Neon) */
+.notif.invalid_request::before {
+  background: linear-gradient(90deg, #ffcc00, #ff6600, #ffaa00, #ffcc00);
+}
+/* Animasi */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Animasi alir */
+@keyframes neon-flow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

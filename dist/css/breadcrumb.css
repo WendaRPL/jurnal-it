@@ -1,0 +1,77 @@
+/* 🔥 BREADCRUMB WRAPPER (FLEXIBLE) */
+.breadcrumb-wrapper {
+  flex: 1; /* 🔥 Ambil sisa space */
+  min-width: 0; /* 🔥 PENTING: Biar bisa truncate */
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 30px; /* 🔥 Fixed height untuk consistency */
+  white-space: nowrap; /* 🔥 Biar ga wrap */
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--cyan);
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-overflow: ellipsis; /* 🔥 Titik-titik kalo kepanjangan */
+  max-width: 300px; /* 🔥 Atur maksimal lebar */
+}
+
+.breadcrumb-item:hover {
+  color: var(--yellow);
+  text-shadow: 0 0 5px var(--yellow), 0 0 10px var(--yellow);
+}
+
+.breadcrumb-separator {
+  color: var(--white);
+  font-weight: 600;
+  flex-shrink: 0; /* 🔥 Biar separator ga kepencet */
+}
+
+.breadcrumb-item.active {
+  color: var(--cyan);
+}
+
+.breadcrumb-item.current {
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.breadcrumb i.fa-home {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb {
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .breadcrumb-item span {
+    display: none; /* Sembunyikan text biasa */
+  }
+  
+  .breadcrumb-item.active span {
+    display: inline !important; /* 🔥 TAPI active tetap tampil */
+    font-size: 14px;
+    max-width: 120px;
+  }
+  
+  .breadcrumb-item .fas.fa-home {
+    display: inline-block; /* 🔥 Icon home tetap tampil */
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,539 @@
+.section-text {
+  font-size: 26px; 
+  color: yellow; 
+  font-weight: bold; 
+  margin-left: 12px; 
+  margin-bottom: 20px;
+}
+
+.unfullfiled-section {
+    background-color: var(--gray);
+    border-radius: 12px;
+    margin: 20px 0; 
+}
+/* Header Section */
+.unfullfiled-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: #00f7ff;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #00f7ff;
+}
+
+.section-content {
+  padding-left: 15px ;
+  margin-right: 15px;   
+  padding-bottom: 15px;
+}
+
+.section-header .total-reports {
+  color: #ffee32;
+}
+
+/* pdf, excel, dll || live search, date search */
+.table-controls {
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 12px;
+  display: flex;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.export-btn {
+  background: transparent;
+  border: 1px solid #00f7ff;
+  padding: 4px 8px;   /* lebih kecil */
+  font-size: 13px;    /* lebih kecil */
+  border-radius: 6px;
+  color: #ffee32; 
+  cursor: pointer;
+}
+.export-btn:hover {
+  background: rgba(255, 255, 2, 0.963);
+  transition: 0.2s ease;
+  color: #000;
+}
+.export-btn:active {
+  transform: scale(0.9);
+}   
+
+.search-container {
+  display: flex;
+  gap: 8px;
+}
+.search-box,
+.search-date {
+  padding: 4px 8px;   /* lebih ramping */
+  font-size: 13px;    /* lebih kecil */
+  height: 32px;       /* fix tinggi */
+  border: 1px solid #00f7ff;
+  border-radius: 6px;
+  background: transparent;
+  color: white;
+  outline: none;
+  transition: background 0.2s;
+}
+.search-box:focus,
+.search-date:focus {
+  border-color: #ffee32;  
+}
+.search-box::placeholder,
+.search-date::placeholder {
+  color: #aaa;
+}
+/* ubah warna icon kalender di input date */
+.search-date::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* bikin icon jadi putih */
+  cursor: pointer;
+}
+
+
+/* Accordion User */
+.user-accordion {
+  margin-bottom: 10px;
+  border: 1px solid #00f7ff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.user-header {
+  background: #2e2e2e;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.user-header:hover {
+  background: #383838;
+}
+/* tambahin highlight kecil pembeda prioritas (pending/approved) */
+.user-header.pending {
+    border-left: 5px solid red;
+}
+.user-header.approved {
+    border-left: 5px solid limegreen;
+}
+
+/* Khusus checkbox di header accordion (sebelah username) */
+.select-all-accordion {
+  cursor: pointer;
+  accent-color: red; /* opsional kalau mau warnanya beda */
+  margin-left: 4px;
+}
+
+.report-date {
+  color: #ffee32;
+  font-weight: bold;
+}
+
+/* Accordion Content */
+.user-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #222;
+}
+.user-name {
+  font-weight: 600;
+  color: cyan;
+  margin-left: 10px;
+}
+.user-name:hover {
+  color: #ffee32;
+}
+.user-content.open {
+  max-height: 1000px; 
+  transition: max-height 0.5s ease;
+  padding: 10px;
+}
+
+/* Table inside accordion */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: rgb(255, 255, 255);
+}
+.user-table thead {
+  color: cyan;
+}
+.user-table th,
+.user-table td {
+  border: 1px solid #00f7ff;
+  padding: 8px;
+  text-align: center;                                                                             
+}
+.user-table th {
+  font-size: 14px;
+  background: #333;
+  text-align: center;
+}
+.user-table td {
+  font-size: 13px;
+}
+.th1 {
+  width: 70px;
+}
+.th2 {
+  width: 240px;
+}
+.th3 {
+  width: 90px;
+}
+
+/* Biar kolom Action menyesuaikan konten */
+.user-table th:last-child,
+.user-table td:last-child {
+    width: 1%;
+    white-space: nowrap; /* biar isinya gak turun ke bawah */
+}
+/* Accordion aktif */
+.user-accordion.active .user-header {
+  background: #4b4b4b;  
+  border-left: 4px solid #00f7ff;  
+  transition: background 0.3s ease, border-left 0.3s ease;
+}
+.user-accordion.active .user-name {
+  color: #ffee32;
+}
+
+/* button reject and approve report */
+.priority-section {
+  color: yellow; 
+}
+.priority-title {
+  margin-left: 10px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+  font-weight: 800;
+  font-size: larger;
+}
+
+.btn-approve {
+    border: 1px solid cyan;    
+    border-radius: 7px;        
+    color: greenyellow;               
+    background-color: var(--gray);  
+    padding: auto;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    font-size: small;
+    justify-content: left;
+    height: 30px;
+    width: 75px;
+}
+.btn-approve:hover {
+    background-color: greenyellow;  
+    color: rgb(0, 0, 0);
+    border: greenyellow;
+}
+.btn-reject {
+    border: 1px solid cyan;    
+    border-radius: 7px;        
+    color: rgb(255, 22, 22);               
+    background-color: var(--gray);  
+    padding: auto;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    font-size: small;
+    justify-content: left;
+    height: 30px;
+    width: 75px;
+}
+.btn-reject:hover {
+    background-color: rgb(255, 22, 22);  
+    color: rgb(255, 255, 255);
+    border: rgb(25, 163, 25);
+}
+
+/* btn selected */
+.btn-approve-selected {
+    border: 1px solid cyan;    
+    border-radius: 7px;        
+    color: greenyellow;               
+    background-color: var(--gray);  
+    padding: auto;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    font-size: 12px;
+    justify-content: center;
+    height: 32px;
+    width: 140px;
+    padding: 4px;
+}
+.btn-reject-selected {
+    border: 1px solid cyan;    
+    border-radius: 7px;        
+    color: rgb(255, 22, 22);                    
+    background-color: var(--gray);  
+    padding: auto;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    font-size: 12px;
+    justify-content: center;
+    height: 32px;
+    width: 140px;
+}
+.btn-approve-selected:hover{
+    background-color: greenyellow;  
+    color: rgb(0, 0, 0);
+    border: greenyellow;
+}
+
+.btn-reject-selected:hover {
+    background-color: rgb(255, 22, 22);  
+    color: rgb(255, 255, 255);
+    border: rgb(25, 163, 25);
+}
+
+/* Tabs */
+.tab-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-bottom: 1px solid cyan;
+}
+.tab-btn {
+  background: transparent;
+  border-style: none;
+  padding: 4px 10px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  color: yellow ;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: medium;
+  transition: 0.2s;
+  border: 1px solid cyan;
+}
+.tab-btn.active,
+.tab-btn:hover {
+  background-color: #ffee32;
+  color: black;
+  border-bottom: none;
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+/* ===================== Pagination Custom ===================== */
+.pagination {
+  margin-top: 20px;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 14px;
+  color: #ffee32; /* teks kuning */
+  border-top: 1px solid #00f7ff;
+}
+
+.pagination span {
+  flex: 1 1 auto;
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* Wrapper angka */
+.pagination-nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Tombol dasar */
+.pagination-nav a {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid #00f7ff;
+  border-radius: 6px;
+  color: cyan;
+  background: transparent;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-weight: 600;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Hover */
+.pagination-nav a:hover {
+  background: #00f7ff;
+  color: #000;
+}
+
+/* Aktif */
+.pagination-nav a.active {
+  background: #ffee32;
+  color: #000;
+  border-color: #ffee32;
+}
+
+/* Disabled */
+.pagination-nav a.disabled {
+  color: #666;
+  border-color: #333;
+  background: #222;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.noResultMessage {
+  text-align: center;
+  color: cyan;
+  margin: 10px 0;
+}
+
+/* ================== SPV NAV ================== */
+.spv-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-bottom: 1px solid cyan;
+}
+
+.tab-btn-spv {
+  background: transparent;
+  border-style: none;
+  padding: 4px 10px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  color: yellow;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: medium;
+  transition: 0.2s;
+  border: 1px solid cyan;
+}
+
+.tab-btn-spv.active,
+.tab-btn-spv:hover {
+  background-color: yellow;
+  color: black;
+  border-bottom: none;
+}
+
+/* SPV Content */
+.tab-content-spv {
+  display: none;
+}
+.tab-content-spv.active {
+  display: block;
+}
+
+
+
+/* ================== RESPONSIVE (Mobile) ================== */
+  @media (max-width: 768px) {
+
+    /* Judul lebih kecil, tengah */
+    .section-text {
+      font-size: 20px;
+      margin: 10px 0;
+    }
+    
+    .table-controls {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .export-buttons {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+    }
+      .export-btn {
+      flex: 1 1 45%;   /* biar bisa dua kolom */
+      text-align: center;
+    }
+
+    .search-container {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .search-box,
+    .search-date {
+      width: 100%;
+      font-size: 12px; 
+      padding: 4px 6px;
+    }
+
+    /* Accordion user */
+    .user-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 12px;
+    }
+
+    /* Table scroll biar muat */
+    .user-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    /* Tab navigasi stack */
+    .tab-nav {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 5px;
+      margin: 10px;
+    }
+
+    .tab-btn {
+      padding: 8px;
+
+    }
+
+    /* Tombol Approve / Reject */
+    .btn-approve,
+    .btn-reject {
+      width: 100%;
+      max-width: 200px;
+      margin: 5px auto;
+      display: block;
+      font-size: 10px;
+    }
+
+    .btn-approve-selected,
+    .btn-reject-selected {
+      width: 100%;
+      margin: 4px auto;
+      font-size: 14px;
+    }
+
+    /* Posisi bulk action */
+    .bulk-actions {
+      margin: 15px auto;
+      flex-direction: row;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .noResultMessage {
+      font-size: smaller;
+    }
+  }
