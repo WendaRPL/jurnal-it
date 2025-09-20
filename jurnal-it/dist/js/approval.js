@@ -191,13 +191,13 @@ $(document).ready(function () {
         table.draw();
     });
 
+    // reset filter
     $('#resetFilter').on('click', function () {
         $('#filterDateStart,#filterDateEnd,#filterTimeStart,#filterTimeEnd,#filterTipe').val('');
         $('.filter-terencana').prop('checked', false);
 
-        // balik ke today
-        $('#filterDateStart,#filterDateEnd').val(today);
-        filters.dateFrom = filters.dateTo = today;
+        // balik ke kosong (semua data), bukan today
+        filters.dateFrom = filters.dateTo = '';
         filters.timeFrom = filters.timeTo = filters.type = '';
         filters.planned = [];
 
@@ -274,15 +274,15 @@ $(document).ready(function () {
     });
 
     // catatan reset button
-    $('#catatanReset').on('click', function () {
-        $('#catatanDateStart,#catatanDateEnd').val(today);
-
-        const url = new URL(window.location.href);
-        url.searchParams.delete("user");
-        window.history.replaceState({}, "", url);
-
-        if (catatanTable) catatanTable.draw();
-    });
+  $('#catatanReset').on('click', function () {
+      $('#catatanDateStart,#catatanDateEnd').val('');   // kosong, bukan today
+  
+      const url = new URL(window.location.href);
+      url.searchParams.delete("user");
+      window.history.replaceState({}, "", url);
+  
+      if (catatanTable) catatanTable.draw();
+  });
 
     // ==================================================
     // TAB SWITCHING
@@ -367,4 +367,5 @@ $(document).ready(function () {
     table.draw();
     if (catatanTable) catatanTable.draw();
 });
+
 
