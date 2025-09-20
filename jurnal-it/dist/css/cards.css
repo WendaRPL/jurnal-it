@@ -90,6 +90,12 @@
   display: flex;
   justify-content: space-between;
 }
+.card-footer:hover {
+  background-color: yellow;
+}
+.card-footer div:hover {
+  color: rgb(2, 190, 190);
+}
 
 /* yg baru hehe */
 .pending-card-accordion {
