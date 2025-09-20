@@ -8,34 +8,55 @@ if (!isset($_SESSION['user_id'])) {
 }
 ob_start();
 
+$role_id = $_SESSION['role_id'];
+$user_id = $_SESSION['user_id'];
+
 // ===================
 // FILTER USER DARI CARD / QUERY
 // ===================
 $filter_user = isset($_GET['user']) ? intval($_GET['user']) : null;
 
 // ===================
+// BATASAN ROLE
+// ===================
+$whereRole = "";
+if ($role_id == 3) {
+    // Staff (role 3) tidak boleh masuk approval
+    header("Location: riwayat.php");
+    exit;
+} elseif ($role_id == 2) {
+    // Supervisor hanya lihat staff, exclude dirinya
+    $whereRole = " AND u.role_id = 3 AND u.id != {$user_id}";
+} elseif ($role_id == 1) {
+    // Admin hanya lihat supervisor
+    $whereRole = " AND u.role_id = 2";
+}
+
+// ===================
 // QUERY USER + TOTAL PENDING + LAST DATE
 // ===================
 $sql_user = "
-    SELECT u.id, u.username,
+    SELECT u.id, u.name,
            MAX(th.date) AS last_date,
            COUNT(DISTINCT th.id) AS total_laporan,
            COUNT(DISTINCT tc.id) AS total_catatan
     FROM user u
     LEFT JOIN transaksi_harian th 
         ON th.user_id = u.id AND th.approved IS NULL
-        " . ($filter_user ? "AND u.id = ?" : "") . "
     LEFT JOIN transaksi_catatan tc 
         ON tc.user_id = u.id AND tc.approved IS NULL
-        " . ($filter_user ? "AND u.id = ?" : "") . "
-    " . ($filter_user ? "WHERE u.id = ?" : "") . "
-    GROUP BY u.id, u.username
-    ORDER BY last_date DESC
+    WHERE 1=1 {$whereRole}
 ";
 
 if ($filter_user) {
+    $sql_user .= " AND u.id = ?";
+}
+
+$sql_user .= " GROUP BY u.id, u.name ORDER BY last_date DESC";
+
+if ($filter_user) {
     $stmt = $conn->prepare($sql_user);
-    $stmt->bind_param("iii", $filter_user, $filter_user, $filter_user);
+    $stmt->bind_param("i", $filter_user);
     $stmt->execute();
     $result_user = $stmt->get_result();
 } else {
@@ -61,18 +82,17 @@ $total_pending = $total_laporan_pending + $total_catatan_pending;
 // QUERY DETAIL LAPORAN HARIAN
 // ===================
 $rows_laporan = [];
+
 $sql_laporan = "
     SELECT th.id, u.name, th.date, th.start_time, th.end_time, 
            th.deskripsi, th.tipe_id, th.terencana, th.status, th.approved
     FROM transaksi_harian th
     JOIN user u ON th.user_id = u.id
-    WHERE th.approved IS NULL
+    WHERE th.approved IS NULL {$whereRole}
 ";
 
 if ($filter_user) {
     $sql_laporan .= " AND u.id = ?";
-} else {
-    $sql_laporan .= " AND DATE(th.date) = CURDATE()";
 }
 
 $sql_laporan .= " ORDER BY th.date DESC, th.start_time DESC";
@@ -94,17 +114,16 @@ while ($result_laporan && $row = $result_laporan->fetch_assoc()) {
 // QUERY CATATAN KHUSUS
 // ===================
 $rows_catatan = [];
+
 $sql_catatan = "
     SELECT tc.id, u.name, tc.date, tc.deskripsi, tc.approved
     FROM transaksi_catatan tc
     JOIN user u ON tc.user_id = u.id
-    WHERE tc.approved IS NULL
+    WHERE tc.approved IS NULL {$whereRole}
 ";
 
 if ($filter_user) {
     $sql_catatan .= " AND u.id = ?";
-} else {
-    $sql_catatan .= " AND DATE(tc.date) = CURDATE()";
 }
 
 $sql_catatan .= " ORDER BY tc.date DESC";
@@ -240,7 +259,7 @@ while ($result_catatan && $row = $result_catatan->fetch_assoc()) {
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Username</th>
+                            <th>Name</th>
                             <th>Tanggal</th>
                             <th>Start</th>
                             <th>End</th>
@@ -299,7 +318,7 @@ while ($result_catatan && $row = $result_catatan->fetch_assoc()) {
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Username</th>
+                            <th>Name</th>
                             <th>Tanggal</th>
                             <th>Catatan</th>
                             <th>Aksi</th>
@@ -311,7 +330,7 @@ while ($result_catatan && $row = $result_catatan->fetch_assoc()) {
                         foreach ($rows_catatan as $row) {
                             echo "<tr>
                                 <td>{$no}</td>
-                                <td>{$row['username']}</td>
+                                <td>{$row['name']}</td>
                                 <td>{$row['date']}</td>
                                 <td>{$row['deskripsi']}</td>
                                 <td>
