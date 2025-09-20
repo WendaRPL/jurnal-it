@@ -60,7 +60,7 @@ require_once "direct/config.php"; // koneksi database
         $query_user = "
             SELECT 
                 u.id,                         
-                u.username,
+                u.name,
                 u.name AS user_name,
                 COUNT(DISTINCT th.id) AS total_laporan,
                 COUNT(DISTINCT tc.id) AS total_catatan,
@@ -74,7 +74,7 @@ require_once "direct/config.php"; // koneksi database
             LEFT JOIN transaksi_catatan tc 
                 ON u.id = tc.user_id AND tc.approved IS NULL
             WHERE u.role_id = ?
-            GROUP BY u.id, u.username, u.name
+            GROUP BY u.id, u.name, u.name
             HAVING total_laporan > 0 OR total_catatan > 0
             ORDER BY last_date DESC
         ";
@@ -113,7 +113,7 @@ require_once "direct/config.php"; // koneksi database
         </div>
         <a href="approval.php" class="card-footer">
             <div style="padding-left: 6px">Lihat Semua Pending</div>
-            <div style="padding-right: 8px">➜</div>
+            <div class="line" style="padding-right: 8px">➜</div>
         </a>
     </div>
 
