@@ -19,7 +19,7 @@
   flex-wrap: wrap;
   gap: 16px;
   padding: 1rem;
-  justify-content: flex-start;
+  justify-self: center;
 }
 
 .user-card {

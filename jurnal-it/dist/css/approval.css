@@ -1,0 +1,1074 @@
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* ==== HEADER ==== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 13px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.header h1 {
+    color: var(--yellow);
+    font-size: 22px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-shadow: 0 0 8px rgba(0, 234, 255, 0.5);
+}
+
+.user-info { text-align: right; }
+.user-name { font-size: 16px; padding: 6px 0; }
+ 
+.user-role {
+    background: var(--cyan);
+    color: var(--dark);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-block;
+}
+ 
+/* ==== Stats ==== */
+.stats-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.stat-card {
+  flex: 1;
+  background: #222;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  border: 1px solid #444;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--yellow);
+  box-shadow: 0 6px 16px rgba(0,234,255,0.25);
+}
+.stat-card .stat-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--yellow);
+}
+.stat-card .stat-label {
+  font-size: 13px;
+  margin-top: 4px;
+  color: #ccc;
+}
+.stat-card.total {
+  background: #333;
+  border: 1px solid var(--yellow);
+}
+
+/* container (filter, tabel-container, and tab) */
+.second-container {
+    border: 1px solid cyan;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* ==== Controls ==== */
+.controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 800;
+    color: var(--yellow);
+}
+.controls-row button {
+    font-size: 17px;
+    border: 1px solid cyan;
+}
+.left-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-inline { display: flex; gap: 10px; }
+
+/* ==== DataTables Controls ==== */
+.dataTables_length select,
+.dataTables_filter input {
+    background: rgba(45,47,52,0.8);
+    border: 1px solid rgba(0, 234, 255, 0.2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: var(--white);
+    font-size: 13px;
+    height: 34px;
+    transition: all 0.2s ease;
+}
+
+.dataTables_length select:hover,
+.dataTables_filter input:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px rgba(0, 234, 255, 0.25);
+    color: white;
+
+}
+
+.dataTables_filter input:focus {
+    box-shadow: 0 0 8px rgba(0,234,255,0.3);
+    outline: none;
+    border-color: cyan;
+}
+#approvalTable_filter input {
+    color: white;
+}
+
+/* ==== Date Range Filter Catatan ==== */
+
+.catatan-date-filter {
+  display: flex;
+}
+
+.catatan-date-filter label {
+  font-weight: bold;
+  color: var(--yellow);
+  font-size: 13px;
+  margin-left: 10px !important;
+}
+
+.catatan-date-filter input[type="date"] {
+  padding: 8px 10px !important;
+  border: 1px solid var(--yellow);
+  border-radius: 6px;
+  background: var(--dark);
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  width: 140px !important;
+  height: 35px !important;
+}
+
+.catatan-date-filter input[type="date"]:hover,
+.catatan-date-filter input[type="date"]:focus {
+  border-color: var(--yellow);
+  box-shadow: 0 0 5px var(--yellow);
+}
+
+.catatan-date-filter .separator {
+  color: #fff;
+  font-weight: bold;
+}
+
+.catatan-date-filter button {
+  padding: 8px 10px;
+  background: var(--yellow);
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-width: 90px;
+  min-height: 20px;
+}
+
+.catatan-date-filter button:hover {
+  background: #ffcc00;
+}
+
+button.btn-reset-inline {
+  padding: 15px 15px !important;
+  font-size: 11px !important;
+  background: #444 !important;
+  color: #fff !important;
+  border: 1px solid #666 !important;
+  border-radius: 4px !important;
+  cursor: pointer;
+  height: 26px !important;
+  width: auto !important;
+  min-width: unset !important;
+  max-width: fit-content !important;
+  line-height: 0 !important; /* biar teks pas */
+}
+.btn-reset-inline:hover {
+  background: #666;
+}
+
+
+/* ==== Buttons ==== */
+.btn-action {
+    border: 1px solid var(--yellow) ;
+    background: rgba(45,47,52,0.8);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    height: 32px;
+    color: var(--yellow) ;
+}
+.btn-action:hover {
+    border-color: var(--cyan)  ;
+    color: var(--cyan) ;
+    box-shadow: 0 0 12px rgba(0,234,255,0.3);
+}
+
+.btn-approve-static {
+    background: var(--dark);
+    color: var(--yellow) !important;
+    border: 1px solid cyan;
+    margin-bottom: 6px;
+    width: 80px fit-content;
+}
+.btn-approve-static:hover {
+    filter: brightness(1.1);
+    background-color: rgb(153, 255, 0) !important;
+    color: var(--dark) !important;
+}
+.btn-reject-static {
+    background: var(--dark);
+    color: var(--yellow) !important;
+    border: 1px solid cyan;
+    width: 80px fit-content;
+}
+.btn-reject-static:hover { 
+    filter: brightness(1.1);
+    background-color: red !important;
+    color: var(--dark) !important;
+}
+
+/* ==== Filter Panel ==== */
+.filter-panel {
+    background-color: rgb(4, 18, 18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 6px;
+    margin-bottom: 14px;
+    padding: 15px 18px;
+    width: 100%;
+    transition: all 0.3s ease;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    border-top: 1px solid gray;
+    color: var(--yellow);
+}
+.filter-panel:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 6px 18px rgba(0,234,255,0.15);
+}
+.filter-panel.closed { display: none; }
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--cyan);
+}
+
+.filter-header h3 {
+    margin: 0;
+    color: var(--cyan);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    text-shadow: 0 0 6px rgba(0,234,255,0.4);
+}
+
+/* Tombol reset inline (catatan date filter) */
+.btn-reset-inline {
+  margin-left: 10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid var(--cyan);
+  border-radius: 4px;
+  background: rgba(45,47,52,0.8);
+  color: var(--yellow);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-reset-inline:hover {
+  border-color: var(--yellow);
+  color: var(--cyan);
+  box-shadow: 0 0 6px rgba(0,234,255,0.3);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px;
+}
+
+/* ==== Filter Body ==== */
+.filter-btn { 
+    padding: 12px 0px 0px 0px;
+    margin-bottom: 3px;
+}
+
+.filter-body {
+    display: flex;
+    flex-wrap: nowrap;   /* jangan turun ke bawah */
+    gap: 20px;
+    align-items: flex-end; /* biar rata bawah */
+    margin-bottom: 12px;
+}
+.filter-body input[type="date"],
+.filter-body input[type="time"] {
+    max-width: 100%;
+}
+
+.filter-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 60px;
+}
+.filter-row label {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--cyan);
+    margin-bottom: 4px;
+}
+
+#filterDateStart,
+#filterDateEnd,
+#filterTimeStart,
+#filterTimeEnd,
+#filterTipe {
+    border: 1px solid gray;
+}
+#filterDateStart:hover,
+#filterDateEnd:hover,
+#filterTimeStart:hover,
+#filterTimeEnd:hover,
+#filterTipe:hover {
+    border: 1px solid var(--cyan);
+}
+#filterDateStart:active,
+#filterDateEnd:active,
+#filterTimeStart:active,
+#filterTimeEnd:active,
+#filterTipe:active {
+    border: 1px solid var(--cyan);
+}
+
+/* ==== Date & Time Range ==== */
+.date-range-field .inline-inputs,
+.time-range-field .inline-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.date-range-field input,
+.time-range-field input {
+    flex: 1;
+    min-width: 0; /* biar fleksibel */
+}
+/* ==== Lebar spesifik per field ==== */
+.date-range-field { width: 320px; }
+.time-range-field { width: 240px; }
+.filter-row select { width: 200px; }
+.filter-row:last-child { width: 180px; } /* untuk Terencana */
+
+.inline-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.inline-inputs input {
+    flex: 1;
+    min-width: 0;
+}
+.separator {
+    color: var(--light);
+    font-size: 12px;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+
+/* ==== Checkbox ==== */
+.checkbox-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    height: 34px; /* biar sejajar sama input lain */
+}
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 13px;
+    margin: 0;
+    color: white;
+}
+.checkbox-group input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(0, 234, 255, 0.3);
+    border-radius: 3px;
+    background: rgba(45,47,52,0.8);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    margin: 0;
+}
+.checkbox-group input[type="checkbox"]:checked {
+    background: var(--yellow);
+    border-color: var(--yellow);
+}
+.checkbox-group input[type="checkbox"]:checked::before {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--dark);
+    font-size: 12px;
+    font-weight: bold;
+}
+.checkbox-group input[type="checkbox"]:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 6px rgba(0, 234, 255, 0.3);
+}
+.checkbox-group input[type="checkbox"]:focus {
+    box-shadow: 0 0 8px rgba(0, 234, 255, 0.4);
+    outline: none;
+}
+
+/* ==== Input & Select ==== */
+.filter-body input,
+.filter-body select {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,234,255,0.2);
+    background: rgba(45,47,52,0.8);
+    color: var(--white);
+    font-size: 13px;
+    height: 34px;
+    transition: 0.2s;
+}
+.filter-body input:focus,
+.filter-body select:focus {
+    box-shadow: 0 0 8px rgba(0,234,255,0.3);
+    outline: none;
+    border-color: cyan;
+}
+
+/* ==== Filter Actions ==== */
+.filter-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 7px;
+    padding-top: 8px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--cyan);
+    padding-right: 20px;
+    justify-content: flex-end;
+}
+
+/* ==== Table ==== */
+.table-container {
+    background: linear-gradient(145deg, rgba(15,35,40,0.95), rgba(10,20,25,0.9));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 234, 255, 0.139);
+    overflow-x: auto;
+    width: 100% !important;
+    padding: 10px 0px;
+    transition: 0.3s;
+    border-bottom: 1px solid var(--cyan);
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-top: 1px solid var(--cyan);
+}
+
+.table-container:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 6px 18px rgba(0,234,255,0.15);
+}
+
+/* Biar child-row (detail row) nggak ketengah */
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control {
+    text-align: center; /* biar tombol expand tetap tengah */
+}
+
+table.dataTable > tbody > tr.child td {
+    text-align: left !important;     /* konten detail rata kiri */
+    padding-left: 16px;              /* kasih jarak dikit dari border */
+    font-size: 13px;
+}
+
+/* label detail (misal: Durasi, Deskripsi, dsb.) biar bold dan cyan */
+table.dataTable > tbody > tr.child td .dtr-title {
+    font-weight: 600;
+    color: var(--cyan);
+    min-width: 90px; /* kasih lebar minimal biar rapih */
+    display: inline-block;
+}
+
+.approval-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+}
+
+.approval-table th {
+    font-size: 13px !important;
+    padding: 8px 6px;
+    border: 1px solid #3d3d3d;
+    background: linear-gradient(145deg, #4f5f84, #2d354a);
+    color: var(--cyan);
+    text-align: left;
+    font-weight: 600;
+    text-shadow: 0 0 6px rgba(0,234,255,0.3);
+}
+
+.approval-table td {
+    font-size: 12px !important;
+    padding: 8px 6px;
+    border: 1px solid #3d3d3d;
+    color: var(--white);
+}
+
+.approval-table tr:hover {
+    background: rgba(0, 234, 255, 0.07);
+}
+
+/* === WIDTH PER KOLOM (sesuai urutan tabel) === */
+.approval-table th:nth-child(1),
+.approval-table td:nth-child(1) { width: 4%; text-align: center; }   /* No */
+.approval-table th:nth-child(2),
+.approval-table td:nth-child(2) { width: 10%; }                      /* Username */
+.approval-table th:nth-child(3),
+.approval-table td:nth-child(3) { width: 9%; text-align: center; }   /* Tanggal */
+.approval-table th:nth-child(4),
+.approval-table td:nth-child(4) { width: 6%; text-align: center; }   /* Start */
+.approval-table th:nth-child(5),
+.approval-table td:nth-child(5) { width: 6%; text-align: center; }   /* End */
+.approval-table th:nth-child(6),
+.approval-table td:nth-child(6) { width: 6%; text-align: center; }   /* Durasi */
+.approval-table th:nth-child(7),
+.approval-table td:nth-child(7) { width: 19%; }                      /* Deskripsi */
+.approval-table th:nth-child(8),
+.approval-table td:nth-child(8) { width: 6%; text-align: center; }   /* Tipe */
+.approval-table th:nth-child(9),
+.approval-table td:nth-child(9) { width: 10%; text-align: center; }   /* Terencana */
+.approval-table th:nth-child(10),
+.approval-table td:nth-child(10) { width: 16%;  } /* Status */
+.approval-table th:nth-child(11),
+.approval-table td:nth-child(11) { width: 10%; text-align: center; } /* Aksi */
+
+/* ==== Status ==== */
+.status-cell {
+    background-color: rgba(45,47,52,0.8) !important;  
+    color: var(--white);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: inline-block;
+}
+.status-pending { background-color: rgba(255, 235, 59, 0.15); color: var(--yellow); }
+.status-approved { background-color: rgba(0, 230, 118, 0.15); color: var(--success); }
+.status-rejected { background-color: rgba(255, 85, 102, 0.15); color: var(--danger); }
+
+/* ==== Pagination + Info ==== */
+/* Info text (Showing 1 to 10 of ...) */
+.dataTables_info {
+    padding: 4px 12px;
+    font-size: 13px;
+    color: var(--light);
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Pagination container */
+.dataTables_paginate {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 8px;
+    font-size: 13px;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+/* Pagination button default */
+.dataTables_paginate .paginate_button {
+    border: 1px solid rgba(0,234,255,0.2);
+    color: var(--white) !important;
+    background: rgba(30, 40, 45, 0.85);
+    border-radius: 6px;
+    padding: 6px 12px;
+    margin: 0 2px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Active page button */
+.dataTables_paginate .paginate_button.current {
+    background: var(--cyan);
+    color: var(--dark) !important;
+    border: 1px solid var(--cyan);
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(0,234,255,0.5);
+}
+
+/* Hover effect */
+.dataTables_paginate .paginate_button:hover {
+    background: var(--cyan);
+    color: var(--dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(0,234,255,0.6);
+}
+
+/* Length dropdown (Show entries) */
+.dataTables_length,
+#approvalTable_length {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--light);
+    padding-left: 6px;
+    padding-top: 2px;
+}
+
+/* Style khusus buat dropdown Show entries */
+#approvalTable_length_select {
+    background-color: rgba(20,30,35,0.9);
+    border: 1px solid rgba(0,234,255,0.2);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 13px;
+    color: white;
+    transition: 0.25s;
+}
+
+#approvalTable_length_select:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 6px rgba(0,234,255,0.3);
+}
+
+/* Style khusus buat search input */
+#approvalTable_search,
+.dataTables_filter {
+    gap: 10px;
+    font-size: 14px;
+    color: var(--light);
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#approvalTable_search:focus,
+#approvalTable_search:hover {
+    box-shadow: 0 0 8px rgba(0,234,255,0.3);
+    outline: none;
+    border-color: cyan;
+}
+
+/* ==== Tabs ==== */
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+    border-bottom: 2px solid cyan;
+}
+
+/* ==== Tab Buttons ==== */
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13px !important;
+    font-weight: 600;
+    color: var(--white);
+    border-bottom: 3px solid transparent;
+    transition: 0.2s;
+
+}
+.tab-btn i {
+  margin-right: 6px;
+}
+.tab-btn:hover {
+  color: var(--yellow);
+}
+.tab-btn.active {
+    color: var(--yellow);
+    border-bottom-color: var(--yellow);
+}
+
+/* ==== Tab Section ==== */
+.tab-section {
+  display: none;
+  margin-top: 12px;
+}
+.tab-section.active {
+  display: block;
+}
+
+/* ==== Catatan Table ==== */
+.catatan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+.catatan-table th {
+  font-size: 13px;
+  padding: 8px 6px;
+  border: 1px solid #3d3d3d;
+  background: linear-gradient(145deg, #4f5f84, #2d354a);
+  color: var(--cyan);
+  text-align: left;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(0,234,255,0.3);
+}
+.catatan-table td {
+  font-size: 12px;
+  padding: 8px 6px;
+  border: 1px solid #3d3d3d;
+  color: var(--white);
+}
+.catatan-table tr:hover {
+  background: rgba(0, 234, 255, 0.07);
+}
+#catatanTable td button {
+  min-width: 80px;
+  margin: 4px 0;
+}
+
+/* Style khusus buat dropdown Show entries catatan */
+#catatanTable_length_select {
+    background-color: rgba(20,30,35,0.9);
+    border: 1px solid rgba(0,234,255,0.2);
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 13px;
+    color: white;
+    transition: 0.25s;
+}
+#catatanTable_length_select:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 6px rgba(0,234,255,0.3);
+}
+#catatanTable_filter input {
+  color: white;
+  font-size: 14px;
+}
+/* Style khusus buat search input */
+#catatanTable_search,
+.dataTables_filter {
+    gap: 10px;
+    font-size: 14px;
+    color: var(--light);
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#catatanTable_search:focus,
+#catatanTable_search:hover {
+    box-shadow: 0 0 8px rgba(0,234,255,0.3);
+    outline: none;
+    border-color: cyan;
+}
+
+/* Kolom width */
+.catatan-table th:nth-child(1),
+.catatan-table td:nth-child(1) { width: 5%; text-align: center; } /* No */
+.catatan-table th:nth-child(2),
+.catatan-table td:nth-child(2) { width: 15%; }                   /* Username */
+.catatan-table th:nth-child(3),
+.catatan-table td:nth-child(3) { width: 15%; text-align: center; } /* Tanggal */
+.catatan-table th:nth-child(4),
+.catatan-table td:nth-child(4) { width: 45%; }                   /* Catatan */
+.catatan-table th:nth-child(5),
+.catatan-table td:nth-child(5) { width: 20%; text-align: center; } /* Aksi */
+
+
+/* Button Catatan */
+.btn-approve-catatan,
+.btn-reject-catatan {
+  min-width: 80px;
+  margin: 4px 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-approve-catatan {
+  background: var(--dark);
+  color: var(--yellow);
+  border: 1px solid cyan;
+}
+
+.btn-approve-catatan:hover {
+  background: rgb(153, 255, 0);
+  color: var(--dark);
+}
+
+.btn-reject-catatan {
+  background: var(--dark);
+  color: var(--yellow);
+  border: 1px solid cyan;
+}
+
+.btn-reject-catatan:hover {
+  background: red;
+  color: var(--dark);
+}
+
+/* === Modal Background === */
+.modal {
+  display: none; 
+  position: fixed;
+  inset: 0; /* ganti semua: top:0; right:0; bottom:0; left:0 */
+  background-color: rgba(0,0,0,0.7);
+
+  /* Flex centering */
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999; /* biar selalu di atas */
+}
+
+/* === Modal Box === */
+.modal-content {
+  background: var(--dark);
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+  border: 1px solid var(--yellow);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: white;
+  font-size: 16px;
+}
+
+/* === Close Button === */
+.modal .close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal .close:hover {
+  color: var(--yellow);
+}
+
+/* === Textarea === */
+#alasan {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 5px;
+  resize: vertical;
+  background-color: black;
+  outline: none;
+  color: white;
+}
+#alasan:hover {
+    border: 1px solid var(--yellow);
+}
+
+ 
+/* Animasi simple */
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.95);}
+  to {opacity: 1; transform: scale(1);}
+}
+
+/* ==== RESPONSIVE FILTER FIX ==== */
+
+/* Tablet landscape (<=1024px) */
+@media (max-width: 1024px) {
+  .filter-body {
+    flex-wrap: wrap;       /* biar bisa turun */
+    gap: 14px;
+  }
+
+  .date-range-field,
+  .time-range-field,
+  .filter-row select,
+  .filter-row:last-child {
+    width: 100% !important;   /* paksa full width */
+  }
+
+  .inline-inputs {
+    flex-wrap: wrap;   /* biar date/time nggak ketekan */
+  }
+  
+  .container {
+    padding: 0 !important;   /* hapus padding */
+    margin: 0 !important;    /* hapus margin */
+    max-width: 100% !important;
+  }
+
+  .modal-content {
+    width: 70%;
+    max-width: 420px;
+  }
+}
+
+/* Tablet potrait & kecil (<=768px) */
+@media (max-width: 768px) {
+  .filter-body {
+    flex-direction: column;   /* stack ke bawah */
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .filter-row {
+    width: 100% !important;
+  }
+
+  .inline-inputs {
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .separator {
+    display: none; /* hemat space di mobile */
+  }
+
+  .filter-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .filter-actions .btn-action {
+    flex: 1; /* tombol full */
+  }
+
+  .container {
+    padding: 0 !important;   /* hapus padding */
+    margin: 0 !important;    /* hapus margin */
+    max-width: 100% !important;
+  }
+
+  .filter-panel,
+  .table-container {
+    width: 100% !important;       /* paksa full */
+    margin: 0 !important;
+    padding-left: 8px;
+    padding-right: 8px;
+    box-sizing: border-box;
+  }
+
+  /* biar datatables wrapper ga kepotong */
+  .dataTables_wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .modal-content {
+    width: 85%;
+    max-width: 360px;
+    padding: 16px;
+  }
+
+  .modal-content h2 {
+    font-size: 15px;
+  }
+
+}
+
+/* Mobile phones (<=480px) */
+@media (max-width: 480px) {
+  .filter-body {
+    gap: 10px;
+  }
+
+  .inline-inputs {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filter-actions .btn-action {
+    width: 100%;
+  }
+
+  .modal-content {
+    width: 90%;
+    max-width: 300px;
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+  .catatan-date-filter {
+    flex-direction: column;  /* jadi vertikal */
+    align-items: stretch;    /* full width */
+    gap: 6px;
+  }
+
+  .catatan-date-filter input[type="date"],
+  .catatan-date-filter button {
+    width: 100%;   /* biar full ke bawah */
+  }
+
+  .catatan-date-filter .separator {
+    display: none; /* hilangkan "s/d", nggak perlu kalau stacked */
+  }
+
+  .modal-content h2 {
+    font-size: 14px;
+  }
+
+  #alasan {
+    min-height: 80px;
+  }
+
+  .tabs {
+    justify-content: center;
+  }
+} 
