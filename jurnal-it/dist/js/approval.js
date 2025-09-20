@@ -117,14 +117,8 @@ $(document).ready(function () {
     // ==================================================
     // SET DEFAULT DATE RANGE FOR APPROVAL FILTER (only when NO user param)
     // ==================================================
-    if (!filterUser) {
-        $('#filterDateStart,#filterDateEnd').val(today);
-        filters.dateFrom = filters.dateTo = today;
-    } else {
-        // if user param present, DO NOT lock the date inputs — start empty so user can expand filter
-        $('#filterDateStart,#filterDateEnd').val('');
-        filters.dateFrom = filters.dateTo = '';
-    }
+    $('#filterDateStart,#filterDateEnd').val('');
+    filters.dateFrom = filters.dateTo = '';
 
     // ==================================================
     // CUSTOM FILTER FOR APPROVAL TABLE (global filters)
@@ -249,11 +243,8 @@ $(document).ready(function () {
     // default behavior for catatan date inputs:
     // - if no user param -> default today (like approval)
     // - if user param -> keep empty so user can expand filter
-    if (!filterUser) {
-        $('#catatanDateStart,#catatanDateEnd').val(today);
-    } else {
-        $('#catatanDateStart,#catatanDateEnd').val('');
-    }
+    $('#catatanDateStart,#catatanDateEnd').val('');
+
 
     // custom filter function for catatan table
     if (!$.fn.dataTable.ext.search._catatanAdded) {
@@ -376,3 +367,4 @@ $(document).ready(function () {
     table.draw();
     if (catatanTable) catatanTable.draw();
 });
+
