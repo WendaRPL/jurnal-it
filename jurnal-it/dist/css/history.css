@@ -1,541 +1,849 @@
-.section-text {
-  font-size: 26px; 
-  color: yellow; 
-  font-weight: bold; 
-  margin-left: 12px; 
-  margin-bottom: 20px;
+/* =====================================================
+   =============== 1. HISTORY PAGE CONTAINER ===========
+   ===================================================== */
+.history-container {
+  background: #1a1a1a;
+  border-radius: 14px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  border: 1px solid rgba(0, 247, 255, 0.3);
+  animation: fadeIn 0.6s ease;
 }
 
-.unfullfiled-section {
-    background-color: var(--gray);
-    border-radius: 12px;
-    margin: 20px 0; 
-    border-radius: 5px;
-}
-/* Header Section */
-.unfullfiled-section .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  font-size: 20px;
+.history-container h2 {
+  font-size: 26px;
   color: #00f7ff;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #00f7ff;
-  border-radius: 5px;
-}
-
-.section-content {
-  padding-left: 15px ;
-  margin-right: 15px;   
+  font-weight: bold;
+  margin-bottom: 25px;
+  text-align: center;
+  border-bottom: 2px solid rgba(255, 238, 50, 0.8);
   padding-bottom: 15px;
+  text-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
 }
 
-.section-header .total-reports {
-  color: #ffee32;
-}
-
-/* pdf, excel, dll || live search, date search */
-.table-controls {
+/* =====================================================
+   =============== 2. SECTION HEADER ===================
+   ===================================================== */
+.section-header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 15px 12px;
-  display: flex;
-}
-
-.export-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.export-btn {
-  background: transparent;
-  border: 1px solid #00f7ff;
-  padding: 4px 8px;   /* lebih kecil */
-  font-size: 13px;    /* lebih kecil */
-  border-radius: 6px;
-  color: #ffee32; 
-  cursor: pointer;
-}
-.export-btn:hover {
-  background: rgba(255, 255, 2, 0.963);
-  transition: 0.2s ease;
-  color: #000;
-}
-.export-btn:active {
-  transform: scale(0.9);
-}   
-
-.search-container {
-  display: flex;
-  gap: 8px;
-}
-.search-box,
-.search-date {
-  padding: 4px 8px;   /* lebih ramping */
-  font-size: 13px;    /* lebih kecil */
-  height: 32px;       /* fix tinggi */
-  border: 1px solid #00f7ff;
-  border-radius: 6px;
-  background: transparent;
-  color: white;
-  outline: none;
-  transition: background 0.2s;
-}
-.search-box:focus,
-.search-date:focus {
-  border-color: #ffee32;  
-}
-.search-box::placeholder,
-.search-date::placeholder {
-  color: #aaa;
-}
-/* ubah warna icon kalender di input date */
-.search-date::-webkit-calendar-picker-indicator {
-  filter: invert(1); /* bikin icon jadi putih */
-  cursor: pointer;
-}
-
-
-/* Accordion User */
-.user-accordion {
-  margin-bottom: 10px;
-  border: 1px solid #00f7ff;
-  border-radius: 6px;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, rgba(0, 247, 255, 0.1) 0%, rgba(52, 73, 94, 0.2) 100%);
+  border-radius: 12px;
+  margin-top: 50px;
+  margin-bottom: 25px;
+  border-left: 4px solid #00f7ff;
+  position: relative;
   overflow: hidden;
+  flex-wrap: wrap;
+  gap: 15px;
 }
+
+.section-header span:first-child {
+  font-size: 22px;
+  font-weight: 700;
+  color: #00f7ff;
+  position: relative;
+  padding-left: 15px;
+  flex: 1;
+  min-width: max-content;
+}
+
+.section-header span:first-child::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: #ffee32;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ffee32;
+}
+
+/* Total reports badge */
+.section-header .total-reports {
+  background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+  color: #ffee32;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 238, 50, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-width: max-content;
+}
+.section-header .total-reports:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 238, 50, 0.5);
+}
+.section-header .total-reports::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 238, 50, 0.1), transparent);
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
+/* =====================================================
+   =============== 3. ACCORDION CONTAINER ==============
+   ===================================================== */
+.accordion-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.user-accordion {
+  border: 1px solid #00f7ff;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #2a2a2a;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s;
+}
+.user-accordion:hover {
+  box-shadow: 0 6px 20px rgba(0, 247, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.progress-group {
+    margin-bottom: 12px;
+}
+.progress-text {
+    font-weight: 500;
+    font-size: 13px;
+}
+.progress-number {
+    float: right;
+    font-size: 12px;
+    color: #666;
+}
+.progress.sm {
+    height: 10px;
+    margin-top: 4px;
+    background: #f4f4f4;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.progress-bar {
+    height: 10px;
+    line-height: 10px;
+    color: #fff;
+    text-align: center;
+    transition: width 0.6s ease;
+}
+
+/* =============================
+   RESPONSIVE PROGRESS BAR
+   ============================= */
+@media (max-width: 768px) {
+  .progress-container {
+    margin-top: 12px;
+  }
+
+  .progress-group {
+    margin-bottom: 12px;
+  }
+
+  .progress-group .progress-label {
+    font-size: 13px;
+    margin-bottom: 4px;
+    text-align: left;
+    display: block;
+  }
+
+  .progress {
+    height: 14px;          /* lebih tipis di mobile */
+    border-radius: 8px;    /* biar tetap smooth */
+  }
+
+  .progress-bar {
+    font-size: 12px;       /* text lebih kecil */
+    line-height: 14px;     /* sejajar dengan tinggi progress */
+  }
+}
+
+/* Extra kecil: HP <480px */
+@media (max-width: 480px) {
+  .progress-group .progress-label {
+    font-size: 12px;
+  }
+
+  .progress {
+    height: 12px;
+  }
+
+  .progress-bar {
+    font-size: 11px;
+  }
+}
+
+
+/* =====================================================
+   =============== 4. USER HEADER ======================
+   ===================================================== */
 .user-header {
-  background: #2e2e2e;
+  background: linear-gradient(135deg, #333 0%, #2a2a2a 100%);
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
+  min-height: 60px;
 }
 .user-header:hover {
-  background: #383838;
+  background: linear-gradient(135deg, #3a3a3a 0%, #313131 100%);
 }
-/* tambahin highlight kecil pembeda prioritas (pending/approved) */
-.user-header.pending {
-    border-left: 5px solid red;
-}
-.user-header.approved {
-    border-left: 5px solid limegreen;
+.user-header.active {
+  background: linear-gradient(135deg, #4b4b4b 0%, #3a3a3a 100%);
+  border-left: 4px solid #00f7ff;
 }
 
-/* Khusus checkbox di header accordion (sebelah username) */
-.select-all-accordion {
-  cursor: pointer;
-  accent-color: red; /* opsional kalau mau warnanya beda */
-  margin-left: 4px;
-}
-
-.report-date {
-  color: #ffee32;
-  font-weight: bold;
-}
-
-/* Accordion Content */
-.user-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  background: #222;
-}
 .user-name {
   font-weight: 600;
   color: cyan;
-  margin-left: 10px;
+  font-size: 18px;
+  flex: 1;
+  transition: color 0.3s ease;
 }
-.user-name:hover {
+.user-header.active .user-name {
   color: #ffee32;
+  text-shadow: 0 0 10px rgba(255, 238, 50, 0.6);
+}
+
+/* Checkbox styling */
+.print-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #02bec4;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+.print-checkbox:hover {
+  border-color: #00aab0;
+  box-shadow: 0 0 4px rgba(0, 191, 255, 0.4);
+}
+.print-checkbox:checked {
+  background-color: #02bec4;
+  border-color: #02bec4;
+}
+.print-checkbox:checked::after {
+  content: "✔";
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Report count bubble */
+.report-count {
+  color: #ffee32;
+  font-weight: bold;
+  margin: 0 20px;
+  background: rgba(52, 73, 94, 0.9);
+  padding: 6px 15px;
+  border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+.user-header.active .report-count {
+  background: rgba(255, 238, 50, 0.2);
+  color: #fff;
+}
+
+/* Accordion icon */
+.accordion-icon {
+  color: #00f7ff;
+  font-size: 14px;
+  transition: transform 0.4s;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-header.active .accordion-icon {
+  transform: rotate(180deg);
+  color: #ffee32;
+}
+
+/* =====================================================
+   =============== 5. USER CONTENT =====================
+   ===================================================== */
+.user-content {
+  max-height: 0;
+  overflow: hidden;
+  background: #252525;
+  transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+              padding 0.4s ease,
+              opacity 0.4s ease;
+  opacity: 0;
 }
 .user-content.open {
-  max-height: 1000px; 
-  transition: max-height 0.5s ease;
-  padding: 10px;
+  max-height: 5000px;
+  opacity: 1;
+  padding: 25px;
+  animation: contentReveal 0.5s ease-out;
+  overflow: visible;
 }
 
-/* Table inside accordion */
+/* Scroll container */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  margin: 0;
+  padding: 5px 0;
+  transform: translateZ(0);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 247, 255, 0.4) rgba(255, 255, 255, 0.1);
+}
+.table-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+.table-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #00f7ff, #00999e);
+  border-radius: 4px;
+}
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #00f7ff, #0077ff);
+}
+
+/* =====================================================
+   =============== 6. TABLE ============================
+   ===================================================== */
 .user-table {
   width: 100%;
-  border-collapse: collapse;
-  color: rgb(255, 255, 255);
+  border-collapse: separate;
+  border-spacing: 0;
+  color: white;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  animation: tableFadeIn 0.5s ease-out 0.2s both;
+  min-width: auto;
 }
 .user-table thead {
-  color: cyan;
-}
-.user-table th,
-.user-table td {
-  border: 1px solid #00f7ff;
-  padding: 8px;
-  text-align: center;                                                                             
+  background: linear-gradient(135deg, #02bec4 0%, #01888d 100%);
 }
 .user-table th {
-  font-size: 14px;
-  background: #333;
+  padding: 16px 18px;
   text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  position: relative;
 }
 .user-table td {
-  font-size: 13px;
-}
-.th1 {
-  width: 70px;
-}
-.th2 {
-  width: 240px;
-}
-.th3 {
-  width: 90px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.25s ease;
 }
 
-/* Biar kolom Action menyesuaikan konten */
-.user-table th:last-child,
-.user-table td:last-child {
-    width: 1%;
-    white-space: nowrap; /* biar isinya gak turun ke bawah */
+/* Hover row */
+.user-table tbody tr:hover {
+  background: rgba(0, 247, 255, 0.08);
+  transform: translateX(4px);
 }
-/* Accordion aktif */
-.user-accordion.active .user-header {
-  background: #4b4b4b;  
-  border-left: 4px solid #00f7ff;  
-  transition: background 0.3s ease, border-left 0.3s ease;
+.user-table tbody tr:hover td {
+  box-shadow: inset 4px 0 0 rgba(0, 247, 255, 0.4);
 }
-.user-accordion.active .user-name {
+
+/* Kolom khusus */
+.user-table td:nth-child(6) { /* tipe */
+  font-weight: 700;
   color: #ffee32;
+  text-shadow: 0 0 5px rgba(255, 238, 50, 0.4);
+}
+.user-table td:nth-child(8) { /* status */
+  font-weight: 700;
+  padding: 8px 16px;
+  min-width: 110px;
+  text-transform: capitalize;
+  transition: all 0.3s ease;
+}
+.user-table td:nth-child(8):hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
-/* button reject and approve report */
-.priority-section {
-  color: yellow; 
+/* =====================================================
+   =============== 7. NO DATA & ERROR ==================
+   ===================================================== */
+.no-data, .error {
+  text-align: center;
+  padding: 30px 25px;
+  border-radius: 12px;
+  margin: 25px 0;
+  font-size: 16px;
+  animation: fadeIn 0.6s ease;
 }
-.priority-title {
-  margin-left: 10px;
-  margin-bottom: 12px;
-  margin-top: 12px;
-  font-weight: 800;
-  font-size: larger;
+.no-data {
+  color: #bbb;
+  font-style: italic;
+  background: #222;
+  border: 2px dashed #555;
 }
-
-.btn-approve {
-    border: 1px solid cyan;    
-    border-radius: 7px;        
-    color: greenyellow;               
-    background-color: var(--gray);  
-    padding: auto;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-    font-size: small;
-    justify-content: left;
-    height: 30px;
-    width: 75px;
-}
-.btn-approve:hover {
-    background-color: greenyellow;  
-    color: rgb(0, 0, 0);
-    border: greenyellow;
-}
-.btn-reject {
-    border: 1px solid cyan;    
-    border-radius: 7px;        
-    color: rgb(255, 22, 22);               
-    background-color: var(--gray);  
-    padding: auto;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-    font-size: small;
-    justify-content: left;
-    height: 30px;
-    width: 75px;
-}
-.btn-reject:hover {
-    background-color: rgb(255, 22, 22);  
-    color: rgb(255, 255, 255);
-    border: rgb(25, 163, 25);
+.error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
 }
 
-/* btn selected */
-.btn-approve-selected {
-    border: 1px solid cyan;    
-    border-radius: 7px;        
-    color: greenyellow;               
-    background-color: var(--gray);  
-    padding: auto;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-    font-size: 12px;
-    justify-content: center;
-    height: 32px;
-    width: 140px;
-    padding: 4px;
-}
-.btn-reject-selected {
-    border: 1px solid cyan;    
-    border-radius: 7px;        
-    color: rgb(255, 22, 22);                    
-    background-color: var(--gray);  
-    padding: auto;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-    font-size: 12px;
-    justify-content: center;
-    height: 32px;
-    width: 140px;
-}
-.btn-approve-selected:hover{
-    background-color: greenyellow;  
-    color: rgb(0, 0, 0);
-    border: greenyellow;
-}
-
-.btn-reject-selected:hover {
-    background-color: rgb(255, 22, 22);  
-    color: rgb(255, 255, 255);
-    border: rgb(25, 163, 25);
-}
-
-/* Tabs */
-.tab-nav {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  border-bottom: 1px solid cyan;
-}
-.tab-btn {
-  background: transparent;
-  border-style: none;
-  padding: 4px 10px;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  color: yellow ;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: medium;
-  transition: 0.2s;
-  border: 1px solid cyan;
-}
-.tab-btn.active,
-.tab-btn:hover {
-  background-color: #ffee32;
-  color: black;
-  border-bottom: none;
-}
-.tab-content {
-  display: none;
-}
-.tab-content.active {
-  display: block;
-}
-
-/* ===================== Pagination Custom ===================== */
-.pagination {
-  margin-top: 20px;
-  padding: 10px 0;
+/* =====================================================
+   =============== 8. CONTROLS =========================
+   ===================================================== */
+.table-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 20px 0;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, rgba(0, 247, 255, 0.05) 0%, rgba(52, 73, 94, 0.1) 100%);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 247, 255, 0.2);
   flex-wrap: wrap;
   gap: 10px;
-  font-size: 14px;
-  color: #ffee32; /* teks kuning */
-  border-top: 1px solid #00f7ff;
 }
-
-.pagination span {
-  flex: 1 1 auto;
-  font-size: 13px;
-  color: #ccc;
-}
-
-/* Wrapper angka */
-.pagination-nav {
+.export-buttons {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   flex-wrap: wrap;
 }
+.export-btn {
+  background: transparent;
+  border: 1px solid #00f7ff;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  color: #ffee32;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+.export-btn:hover {
+  background: rgba(255, 238, 50, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 247, 255, 0.3);
+}
 
-/* Tombol dasar */
-.pagination-nav a {
-  display: inline-block;
-  padding: 6px 12px;
+.search-box {
+  padding: 6px 10px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: #1f1f1f;
+  color: #fff;
+  min-width: 200px;
+}
+
+.search-box::placeholder {
+  color: #aaa;
+}
+
+
+/* ===================== */
+/* Date Range Styling    */
+/* ===================== */
+
+.date-range-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #111;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00ffff55;
+  margin-bottom: 20px;
+}
+
+/* Date input */
+.search-date {
+  background-color: #000;
+  border: 1px solid #00ffff;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+  min-width: 140px; /* biar konsisten */
+}
+
+.search-date:focus {
+  outline: none;
+  border-color: #ffd400;
+  box-shadow: 0 0 8px #00ffff80;
+}
+
+/* Separator */
+.date-range-separator {
+  color: #00ffff;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 0 5px;
+}
+
+/* Buttons */
+.date-range-btn {
+  background: linear-gradient(135deg, #00ffff, #00aaff);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px; /* pill style */
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 0 10px #00ffff80;
+}
+
+.date-range-btn:hover {
+  background: linear-gradient(135deg, #ffd400, #ffaa00);
+  color: #000;
+  box-shadow: 0 0 12px #ffd400aa;
+}
+
+.date-range-btn:active {
+  transform: scale(0.96);
+}
+
+
+/* =====================================================
+   =============== 9. TAB SWITCH =======================
+   ===================================================== */
+.tab-switch {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 20px 0;
+}
+.tab-btn {
+  padding: 10px 20px;
   border: 1px solid #00f7ff;
   border-radius: 6px;
-  color: cyan;
-  background: transparent;
-  text-decoration: none;
-  transition: all 0.2s;
+  background: #1e1e1e;
+  color: #ffee32;
+  cursor: pointer;
   font-weight: 600;
-  min-width: 32px;
-  text-align: center;
+  transition: all 0.3s ease;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, #00f7ff, #0077ff);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 247, 255, 0.4);
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* =====================================================
+   =============== 10. PRINT MODE ======================
+   ===================================================== */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .tab-switch, .table-controls, .print-checkbox, .accordion-icon { display: none !important; }
+  .history-container { background: none !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
+  .user-header { background: #f5f5f5 !important; border: 1px solid #ccc !important; color: #000 !important; }
+  .user-content { max-height: none !important; opacity: 1 !important; padding: 10px !important; }
+  .user-table { border: 1px solid #444; color: #000; }
+  .user-table th, .user-table td { border: 1px solid #444; color: #000; background: #fff !important; }
+  .report-count { color: #000 !important; background: none !important; box-shadow: none !important; }
 }
 
-/* Hover */
-.pagination-nav a:hover {
-  background: #00f7ff;
-  color: #000;
+/* =====================================================
+   =============== 11. ANIMATIONS ======================
+   ===================================================== */
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+@keyframes contentReveal {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes tableFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Aktif */
-.pagination-nav a.active {
-  background: #ffee32;
-  color: #000;
+/* =====================================================
+   =============== 12. ROLE BASED SKIN =================
+   ===================================================== */
+
+/* SPV STYLE */
+.user-accordion.spv {
+  border-color: #00f7ff;
+}
+.user-accordion.spv .user-header.active {
+  border-left: 4px solid #00f7ff;
+}
+.user-accordion.spv .accordion-icon {
+  color: #00f7ff;
+}
+.user-accordion.spv .user-header.active .accordion-icon {
+  color: #00e1ff;
+}
+.user-accordion.spv .report-count {
+  background: rgba(0, 247, 255, 0.15);
+  color: #00f7ff;
+}
+
+/* STAFF STYLE */
+.user-accordion.staff {
   border-color: #ffee32;
 }
-
-/* Disabled */
-.pagination-nav a.disabled {
-  color: #666;
-  border-color: #333;
-  background: #222;
-  cursor: not-allowed;
-  pointer-events: none;
+.user-accordion.staff .user-header.active {
+  border-left: 4px solid #ffee32;
+}
+.user-accordion.staff .accordion-icon {
+  color: #ffee32;
+}
+.user-accordion.staff .user-header.active .accordion-icon {
+  color: #fff176;
+}
+.user-accordion.staff .report-count {
+  background: rgba(255, 238, 50, 0.15);
+  color: #ffee32;
 }
 
-.noResultMessage {
-  text-align: center;
-  color: cyan;
-  margin: 10px 0;
+/* =====================================================
+   =============== 13. EXTRA SPACING ===================
+   ===================================================== */
+.user-accordion {
+  margin-bottom: 20px; /* kasih lebih banyak space antar accordion */
 }
 
-/* ================== SPV NAV ================== */
-.spv-nav {
+
+/* ======================================================
+   =========== 14. NOTIFICATION CONTAINER ===============
+   ====================================================== */
+.notif-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
-  border-bottom: 1px solid cyan;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 2000;
 }
 
-.tab-btn-spv {
-  background: transparent;
-  border-style: none;
-  padding: 4px 10px;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  color: yellow;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: medium;
-  transition: 0.2s;
-  border: 1px solid cyan;
+/* ===== Notification Box ===== */
+.notif {
+  min-width: 240px;
+  max-width: 320px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff;
+  background: #111;
+  overflow: hidden;
+  position: relative;
+  animation: slideIn 0.4s ease, fadeOut 0.6s ease 3.5s forwards;
 }
 
-.tab-btn-spv.active,
-.tab-btn-spv:hover {
-  background-color: yellow;
-  color: black;
-  border-bottom: none;
+/* ===== Neon border effect ===== */
+.notif::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(90deg, var(--clr), transparent 70%);
+  background-size: 300% 300%;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: neonRun 2s linear infinite;
 }
 
-/* SPV Content */
-.tab-content-spv {
-  display: none;
+/* ===== Warna per status ===== */
+.notif.created { --clr: #00ff95; color: #00ff95; }
+.notif.updated { --clr: #00cfff; color: #00cfff; }
+.notif.deleted { --clr: #ff3b3b; color: #ff3b3b; }
+.notif.cannot_delete_admin { --clr: #ffd000; color: #ffd000; }
+.notif.invalid_request { --clr: #aaa; color: #aaa; }
+
+/* tambahan universal */
+.notif.success { --clr: #00ff95; color: #00ff95; }
+.notif.error   { --clr: #ff3b3b; color: #ff3b3b; }
+
+/* ===== Animations ===== */
+@keyframes neonRun {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
-.tab-content-spv.active {
-  display: block;
+
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateX(120%); }
 }
 
 
-
-/* ================== RESPONSIVE (Mobile) ================== */
-  @media (max-width: 768px) {
-
-    /* Judul lebih kecil, tengah */
-    .section-text {
-      font-size: 20px;
-      margin: 10px 0;
-    }
-    
-    .table-controls {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-    }
-
-    .export-buttons {
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-    }
-      .export-btn {
-      flex: 1 1 45%;   /* biar bisa dua kolom */
-      text-align: center;
-    }
-
-    .search-container {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .search-box,
-    .search-date {
-      width: 100%;
-      font-size: 12px; 
-      padding: 4px 6px;
-    }
-
-    /* Accordion user */
-    .user-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-      padding: 12px;
-    }
-
-    /* Table scroll biar muat */
-    .user-table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-
-    /* Tab navigasi stack */
-    .tab-nav {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 5px;
-      margin: 10px;
-    }
-
-    .tab-btn {
-      padding: 8px;
-
-    }
-
-    /* Tombol Approve / Reject */
-    .btn-approve,
-    .btn-reject {
-      width: 100%;
-      max-width: 200px;
-      margin: 5px auto;
-      display: block;
-      font-size: 10px;
-    }
-
-    .btn-approve-selected,
-    .btn-reject-selected {
-      width: 100%;
-      margin: 4px auto;
-      font-size: 14px;
-    }
-
-    /* Posisi bulk action */
-    .bulk-actions {
-      margin: 15px auto;
-      flex-direction: row;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .noResultMessage {
-      font-size: smaller;
-    }
+/* =====================================================
+   =============== RESPONSIVE FLEX MOBILE ==============
+   ===================================================== */
+@media (max-width: 768px) {
+  /* History container lebih ramping */
+  .history-container {
+    padding: 15px;
+    margin: 10px 0;
   }
+
+  .history-container h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  /* Section header flex jadi column */
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 15px;
+  }
+
+  .section-header span:first-child {
+    font-size: 18px;
+    padding-left: 12px;
+  }
+
+  .section-header .total-reports {
+    align-self: flex-start;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  /* Table controls stack rapi */
+  .table-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  /* Export tombol full width rapih */
+  .export-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .export-btn {
+    flex: 1 1 calc(50% - 8px); /* 2 tombol per baris */
+    text-align: center;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  /* Range filter full width */
+  .date-range-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .search-date {
+    width: 100%;
+  }
+
+  .date-range-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  /* User header jadi wrap biar checkbox & report count gak ketindih */
+  .user-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .user-name {
+    font-size: 16px;
+    flex: 100%;
+  }
+
+  .report-count {
+    margin: 0;
+    font-size: 13px;
+    padding: 5px 12px;
+  }
+
+  .accordion-icon {
+    margin-left: auto;
+  }
+
+  /* User content padding lebih kecil */
+  .user-content.open {
+    padding: 15px;
+  }
+
+  /* Tabel: force scroll horizontal */
+  .user-table {
+    min-width: 600px; /* biar tabel tetep rapi, scroll di container */
+    font-size: 12px;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  /* Tab switch full width */
+  .tab-switch {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+  }
+}
