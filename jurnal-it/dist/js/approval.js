@@ -1,4 +1,6 @@
+// dist/js/approval.js
 $(document).ready(function () {
+
     // ==================================================
     // HELPER FUNCTIONS
     // ==================================================
@@ -9,6 +11,7 @@ $(document).ready(function () {
 
     function parseDate(str) {
         if (!str) return null;
+        // expects 'yyyy-mm-dd'
         const parts = str.split('-');
         return new Date(parts[0], parts[1] - 1, parts[2]);
     }
@@ -19,9 +22,39 @@ $(document).ready(function () {
         return h * 60 + (m || 0);
     }
 
+    // safe date compare (ignore time)
+    function isBefore(a, b) {
+        if (!a || !b) return false;
+        const da = parseDate(a), db = parseDate(b);
+        return da < db;
+    }
+    function isAfter(a, b) {
+        if (!a || !b) return false;
+        const da = parseDate(a), db = parseDate(b);
+        return da > db;
+    }
+
     // ==================================================
-    // INIT APPROVAL TABLE
+    // INITIAL VARS / URL PARAMS
     // ==================================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterUser = urlParams.get('user'); // if present, it's starting focus on user
+    const today = todayStr();
+
+    // central filter state used by customFilter
+    const filters = {
+        dateFrom: '',
+        dateTo: '',
+        timeFrom: '',
+        timeTo: '',
+        type: '',
+        planned: [] // array of strings: ['Iya','Tidak']
+    };
+
+    // ==================================================
+    // INIT DATATABLES
+    // ==================================================
+    // Approval table (laporan harian)
     const table = $('#approvalTable').DataTable({
         responsive: true,
         autoWidth: false,
@@ -37,15 +70,12 @@ $(document).ready(function () {
         },
         columnDefs: [{ targets: [0, 10], orderable: false }],
         createdRow: function (row, data) {
-            // hitung durasi otomatis
+            // data array -> columns as in template
             const start = data[3], end = data[4];
             let durasiText = '-';
-            if (start && end && typeof start === 'string' && typeof end === 'string') {
-                const [sh, sm] = start.split(':').map(Number);
-                const [eh, em] = end.split(':').map(Number);
-                if (!isNaN(sh) && !isNaN(eh)) {
-                    let minutes = (eh * 60 + (em || 0)) - (sh * 60 + (sm || 0));
-                    if (minutes < 0) minutes = 0;
+            if (start && end) {
+                const minutes = hhmmToMin(end) - hhmmToMin(start);
+                if (!isNaN(minutes) && minutes >= 0) {
                     const h = String(Math.floor(minutes / 60)).padStart(2, '0');
                     const m = String(minutes % 60).padStart(2, '0');
                     durasiText = h + ':' + m;
@@ -55,12 +85,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#approvalTable_length select").attr({ id: "approvalTable_length_select", name: "approvalTable_length" });
-    $("#approvalTable_filter input").attr({ id: "approvalTable_search", name: "approvalTable_search" });
-
-    // ==================================================
-    // INIT CATATAN TABLE
-    // ==================================================
+    // catatan table (catatan khusus)
     let catatanTable = null;
     try {
         catatanTable = $('#catatanTable').DataTable({
@@ -82,159 +107,123 @@ $(document).ready(function () {
         console.warn("catatanTable init failed:", err);
     }
 
+    // assign proper IDs to datatable length/search selects/inputs
+    $("#approvalTable_length select").attr({ id: "approvalTable_length_select", name: "approvalTable_length" });
+    $("#approvalTable_filter input").attr({ id: "approvalTable_search", name: "approvalTable_search" });
+
     $("#catatanTable_length select").attr({ id: "catatanTable_length_select", name: "catatanTable_length" });
     $("#catatanTable_filter input").attr({ id: "catatanTable_search", name: "catatanTable_search" });
 
     // ==================================================
-    // FILTER LOGIC (APPROVAL)
+    // SET DEFAULT DATE RANGE FOR APPROVAL FILTER (only when NO user param)
     // ==================================================
-    const filters = {
-        dateFrom: '',
-        dateTo: '',
-        timeFrom: '',
-        timeTo: '',
-        type: '',
-        planned: []
-    };
-
-    // ambil user dari URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const filterUser = urlParams.get('user'); // user ID dari URL
-    const today = todayStr();
-
-    // set default filter tanggal
     if (!filterUser) {
-        // kalau tidak ada user → default today
         $('#filterDateStart,#filterDateEnd').val(today);
         filters.dateFrom = filters.dateTo = today;
     } else {
-        // kalau ada user → kosongkan tanggal, tampil semua
+        // if user param present, DO NOT lock the date inputs — start empty so user can expand filter
         $('#filterDateStart,#filterDateEnd').val('');
         filters.dateFrom = filters.dateTo = '';
     }
 
-    function customFilter(settings, data, dataIndex) {
+    // ==================================================
+    // CUSTOM FILTER FOR APPROVAL TABLE (global filters)
+    // ==================================================
+    function approvalCustomFilter(settings, data, dataIndex) {
+        // only apply to approvalTable
         if (settings.nTable.id !== 'approvalTable') return true;
-
         const rowData = table.row(dataIndex).data();
         if (!rowData) return true;
 
-        const tanggal = rowData[2], start = rowData[3], end = rowData[4];
+        const tanggal = rowData[2]; // expect yyyy-mm-dd
+        const start = rowData[3];
+        const end = rowData[4];
         const tipe = (rowData[7] || '').toString().trim();
         const terencana = (rowData[8] || '').toString().trim().toLowerCase();
         const planned = filters.planned.map(v => v.toLowerCase());
 
-        // =====================
-        // FILTER DATE (hanya kalau tidak filter user)
-        // =====================
-        if (!filterUser) {
-            if (filters.dateFrom) {
-                const d = parseDate(tanggal), f = parseDate(filters.dateFrom);
-                if (d && f && d < f) return false;
-            }
-            if (filters.dateTo) {
-                const d = parseDate(tanggal), t = parseDate(filters.dateTo);
-                if (d && t && d > t) return false;
-            }
+        // DATE filter: only enforce if user _set_ dateFrom/dateTo in filters (not auto-locked)
+        if (filters.dateFrom && parseDate(tanggal) < parseDate(filters.dateFrom)) return false;
+        if (filters.dateTo && parseDate(tanggal) > parseDate(filters.dateTo)) return false;
+
+        // TIME filter
+        if (filters.timeFrom && start) {
+            if (hhmmToMin(start) < hhmmToMin(filters.timeFrom)) return false;
+        }
+        if (filters.timeTo && end) {
+            if (hhmmToMin(end) > hhmmToMin(filters.timeTo)) return false;
         }
 
-        // FILTER TIME
-        if (filters.timeFrom) {
-            const s = hhmmToMin(start), f = hhmmToMin(filters.timeFrom);
-            if (s !== null && f !== null && s < f) return false;
-        }
-        if (filters.timeTo) {
-            const e = hhmmToMin(end), t = hhmmToMin(filters.timeTo);
-            if (e !== null && t !== null && e > t) return false;
-        }
-
-        // FILTER TIPE
+        // Tipe filter
         if (filters.type && tipe !== filters.type) return false;
 
-        // FILTER TERENCANA
-        if (planned.length > 0 && !planned.includes(terencana)) return false;
+        // Terencana filter
+        if (planned.length && !planned.includes(terencana)) return false;
 
         return true;
     }
 
-    if (!$.fn.dataTable.ext.search._customFilterAdded) {
-        $.fn.dataTable.ext.search.push(customFilter);
-        $.fn.dataTable.ext.search._customFilterAdded = true;
+    if (!$.fn.dataTable.ext.search._approvalAdded) {
+        $.fn.dataTable.ext.search.push(approvalCustomFilter);
+        $.fn.dataTable.ext.search._approvalAdded = true;
     }
 
     // ==================================================
-    // UPDATE STATS (laporan harian)
+    // STATS UPDATE (based on currently displayed approval table rows)
     // ==================================================
     function updateStats() {
         const rows = table.rows({ search: 'applied' }).nodes();
         $('#stat-total').text(rows.length);
-        $('#stat-pending').text($(rows).find('.status-pending').length || 0);
-        $('#stat-approved').text($(rows).find('.status-approved').length || 0);
-        $('#stat-rejected').text($(rows).find('.status-rejected').length || 0);
+        $('#stat-pending').text($(rows).find('.status-pending').length);
+        $('#stat-approved').text($(rows).find('.status-approved').length);
+        $('#stat-rejected').text($(rows).find('.status-rejected').length);
     }
     updateStats();
     table.on('draw', updateStats);
 
     // ==================================================
-    // FILTER PANEL APPROVAL
+    // FILTER PANEL HANDLERS (apply / reset)
     // ==================================================
-    const panel = $('#filterPanel');
-    const toggleBtn = $('#toggleFilterBtn');
-    const closeBtn = $('.modal-close');
+    $('#applyFilter').on('click', function () {
+        // read filters from inputs
+        filters.dateFrom = $('#filterDateStart').val() || '';
+        filters.dateTo = $('#filterDateEnd').val() || '';
+        filters.timeFrom = $('#filterTimeStart').val() || '';
+        filters.timeTo = $('#filterTimeEnd').val() || '';
+        filters.type = $('#filterTipe').val() || '';
+        filters.planned = $('.filter-terencana:checked').map(function () { return $(this).val(); }).get() || [];
 
-    toggleBtn.click(e => { e.stopPropagation(); panel.toggleClass('closed'); });
-    closeBtn.click(e => { e.stopPropagation(); panel.addClass('closed'); });
-
-    $('#applyFilter').click(function () {
-        filters.dateFrom = $('#filterDateStart').val();
-        filters.dateTo = $('#filterDateEnd').val();
-        filters.timeFrom = $('#filterTimeStart').val();
-        filters.timeTo = $('#filterTimeEnd').val();
-        filters.type = $('#filterTipe').val();
-        filters.planned = $('.filter-terencana:checked').map(function () {
-            return $(this).val();
-        }).get();
+        // redraw approval table (will call approvalCustomFilter)
         table.draw();
     });
 
-    $('#resetFilter').click(function () {
+    $('#resetFilter').on('click', function () {
         $('#filterDateStart,#filterDateEnd,#filterTimeStart,#filterTimeEnd,#filterTipe').val('');
         $('.filter-terencana').prop('checked', false);
-        if (!filterUser) {
-            // default today
-            $('#filterDateStart,#filterDateEnd').val(today);
-            filters.dateFrom = filters.dateTo = today;
-        } else {
-            // kosongkan semua
-            $('#filterDateStart,#filterDateEnd').val('');
-            filters.dateFrom = filters.dateTo = '';
-        }
+
+        // balik ke today
+        $('#filterDateStart,#filterDateEnd').val(today);
+        filters.dateFrom = filters.dateTo = today;
         filters.timeFrom = filters.timeTo = filters.type = '';
         filters.planned = [];
-        table.draw();
+
+        // hapus user param dari URL lalu reload
+        const url = new URL(window.location.href);
+        url.searchParams.delete("user"); 
+        window.location.href = url.toString();
     });
 
     // ==================================================
-    // INLINE EDIT
+    // INLINE EDIT (dblclick to edit textarea)
     // ==================================================
     $(document).on('dblclick', '.editable', function () {
         const cell = table.cell(this);
         if ($(this).find('textarea').length) return;
-
         const original = cell.data();
-        const input = $('<textarea>')
-            .val(original)
-            .css({
-                width: '100%',
-                minHeight: '36px',
-                background: '#2f2f2f',
-                color: 'white',
-                border: '1px solid #00FFFF',
-                borderRadius: '3px',
-                padding: '3px',
-                fontSize: '10px'
-            });
-
+        const input = $('<textarea>').val(original).css({
+            width: '100%', minHeight: '36px', background: '#2f2f2f', color: 'white',
+            border: '1px solid #00FFFF', borderRadius: '3px', padding: '3px', fontSize: '10px'
+        });
         $(this).empty().append(input);
         input.focus();
 
@@ -249,7 +238,7 @@ $(document).ready(function () {
     });
 
     // ==================================================
-    // CATATAN DATE FILTER
+    // CATATAN DATE FILTER WIDGET (render & handlers)
     // ==================================================
     $("div.catatan-date-filter").html(`
         <label style="margin-left:10px;">Dari: <input type="date" id="catatanDateStart"></label>
@@ -257,142 +246,133 @@ $(document).ready(function () {
         <button id="catatanReset" class="btn-reset-inline">Reset</button>
     `);
 
+    // default behavior for catatan date inputs:
+    // - if no user param -> default today (like approval)
+    // - if user param -> keep empty so user can expand filter
+    if (!filterUser) {
+        $('#catatanDateStart,#catatanDateEnd').val(today);
+    } else {
+        $('#catatanDateStart,#catatanDateEnd').val('');
+    }
+
+    // custom filter function for catatan table
     if (!$.fn.dataTable.ext.search._catatanAdded) {
         $.fn.dataTable.ext.search.push(function (settings, data) {
             if (settings.nTable.id !== 'catatanTable') return true;
+
+            const tanggal = data[2]; // expected 'yyyy-mm-dd'
+            if (!tanggal) return true;
+
             const min = $('#catatanDateStart').val();
             const max = $('#catatanDateEnd').val();
-            const tanggal = data[2];
-
-            if (!min && !max) return true;
             const d = new Date(tanggal);
+
+            // Only apply restrictions if the inputs actually have values.
+            // This ensures that when user param exists and inputs are empty, filter won't force-limit rows.
             if (min && d < new Date(min)) return false;
             if (max && d > new Date(max)) return false;
+
             return true;
         });
         $.fn.dataTable.ext.search._catatanAdded = true;
     }
 
+    // redraw on date change
     $('#catatanDateStart,#catatanDateEnd').on('change', function () {
         if (catatanTable) catatanTable.draw();
     });
 
+    // catatan reset button
     $('#catatanReset').on('click', function () {
-        if (!filterUser) {
-            $('#catatanDateStart,#catatanDateEnd').val(today);
-        } else {
-            $('#catatanDateStart,#catatanDateEnd').val('');
-        }
+        $('#catatanDateStart,#catatanDateEnd').val(today);
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete("user");
+        window.history.replaceState({}, "", url);
+
         if (catatanTable) catatanTable.draw();
     });
 
     // ==================================================
-    // DEFAULT DRAW TABLES
-    // ==================================================
-    table.draw();
-    if (catatanTable) catatanTable.draw();
-
-    // ==================================================
     // TAB SWITCHING
     // ==================================================
-    $('.tab-btn').click(function () {
+    $('.tab-btn').on('click', function () {
         $('.tab-btn').removeClass('active');
         $(this).addClass('active');
-
         $('.tab-section').removeClass('active').hide();
+
         const targetSelector = $(this).data('target');
         const $target = $(targetSelector);
-        $target.add
-                $target.addClass('active').show();
+        $target.addClass('active').show();
 
         if (targetSelector === '#catatanSection') {
             $('#toggleFilterBtn').hide();
-            panel.addClass('closed');
-            if (catatanTable) {
-                try {
-                    catatanTable.columns.adjust();
-                    if (catatanTable.responsive && typeof catatanTable.responsive.recalc === 'function') {
-                        catatanTable.responsive.recalc();
-                    }
-                    catatanTable.draw(false);
-                } catch (err) {
-                    console.warn('Error adjusting catatanTable:', err);
-                }
-            }
+            $('#filterPanel').addClass('closed');
+            if (catatanTable) { catatanTable.columns.adjust().responsive.recalc().draw(false); }
         } else {
             $('#toggleFilterBtn').show();
         }
     });
 
+    // open filter panel toggle
+    const panel = $('#filterPanel');
+    $('#toggleFilterBtn').on('click', function (e) { e.stopPropagation(); panel.toggleClass('closed'); });
+    $('.modal-close').on('click', function (e) { e.stopPropagation(); panel.addClass('closed'); });
+
     // ==================================================
-    // MODAL PENOLAKAN
+    // REJECT MODAL
     // ==================================================
-    function openRejectModal(id, type = 'laporan', username = '') {
+    function openRejectModal(id, type = 'laporan', name = '') {
         $('#rejectId').val(id);
         $('#rejectType').val(type);
-        if (username) {
-            if ($('#rejectUsername').length === 0) {
-                $('<p>').attr('id', 'rejectUsername').insertAfter($('#rejectModal h2'));
-            }
-            $('#rejectUsername').text('Menolak laporan dari: ' + username);
+        if (name) {
+            if ($('#rejectName').length === 0) { $('<p>').attr('id', 'rejectName').insertAfter($('#rejectModal h2')); }
+            $('#rejectName').text('Menolak laporan dari: ' + name);
         }
         $('#rejectModal').css('display', 'flex').show();
         setTimeout(() => $('#alasan').focus(), 100);
     }
-
     function closeRejectModal() {
         $('#rejectModal').hide();
         $('#alasan').val('');
+        $('#rejectName').remove(); // clean up optional name paragraph
     }
 
     $('.close').on('click', closeRejectModal);
-    $(document).on('click', e => {
-        if ($(e.target).hasClass('modal')) closeRejectModal();
+    $(document).on('click', function (e) { if ($(e.target).hasClass('modal')) closeRejectModal(); });
+    $(document).on('keydown', function (e) { if (e.key === 'Escape' && $('#rejectModal').is(':visible')) closeRejectModal(); });
+
+    // bind reject buttons (static & catatan)
+    $(document).on('click', '.btn-reject-static', function () {
+        openRejectModal($(this).data('id'), 'laporan', $(this).data('name') || '');
     });
-    $(document).on('keydown', e => {
-        if (e.key === 'Escape' && $('#rejectModal').is(':visible')) closeRejectModal();
+    $(document).on('click', '.btn-reject-catatan', function () {
+        openRejectModal($(this).data('id'), 'catatan', $(this).data('name') || '');
     });
 
     // ==================================================
-    // EVENT HANDLERS (Approve / Reject)
+    // APPROVE / REJECT ACTIONS (AJAX posts to update_status.php)
     // ==================================================
     $(document).on('click', '.btn-approve-static', function () {
         const id = $(this).data('id');
-        $.post('update_status.php', { id, type: 'laporan' }, res => {
-            alert('Data laporan berhasil di-approve');
-            location.reload();
-        });
+        $.post('update_status.php', { id, type: 'laporan' }, () => location.reload());
     });
 
     $(document).on('click', '.btn-approve-catatan', function () {
         const id = $(this).data('id');
-        $.post('update_status.php', { id, type: 'catatan' }, res => {
-            alert('Data catatan berhasil di-approve');
-            location.reload();
-        });
-    });
-
-    $(document).on('click', '.btn-reject-static', function () {
-        openRejectModal($(this).data('id'), 'laporan', $(this).data('username') || '');
-    });
-
-    $(document).on('click', '.btn-reject-catatan', function () {
-        openRejectModal($(this).data('id'), 'catatan', $(this).data('username') || '');
+        $.post('update_status.php', { id, type: 'catatan' }, () => location.reload());
     });
 
     $('#rejectForm').on('submit', function (e) {
         e.preventDefault();
-        const id = $('#rejectId').val(),
-              type = $('#rejectType').val(),
-              alasan = $('#alasan').val();
-
-        if (!alasan.trim()) return alert('Harap isi alasan penolakan');
-
-        $.post('update_status.php', { id, type, alasan }, res => {
-            alert('Data berhasil ditolak');
-            closeRejectModal();
-            location.reload();
-        });
+        const id = $('#rejectId').val(), type = $('#rejectType').val(), alasan = $('#alasan').val();
+        if (!alasan || !alasan.trim()) return alert('Harap isi alasan penolakan');
+        $.post('update_status.php', { id, type, alasan }, () => { closeRejectModal(); location.reload(); });
     });
 
+    // ==================================================
+    // DEFAULT DRAW (ensure everything draws correctly on load)
+    // ==================================================
+    table.draw();
+    if (catatanTable) catatanTable.draw();
 });
