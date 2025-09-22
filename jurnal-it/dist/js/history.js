@@ -45,18 +45,19 @@ const tipeColors = {
 };
 
 // ======================
-// Render Progress Bar per User (ganti donut chart)
+// Render Progress Bar + Donut Chart per User
 // ======================
 function renderUserProgress() {
     document.querySelectorAll('.user-accordion').forEach(acc => {
         const uid = acc.dataset.userid;
+        const chartContainer = acc.querySelector('.chart-container');
         const progressContainer = acc.querySelector('.progress-container');
-        if (!progressContainer) return;
+        if (!progressContainer || !chartContainer) return;
 
-        // Reset dulu
+        // Reset
         progressContainer.innerHTML = "";
+        chartContainer.innerHTML = `<canvas id="chart-${uid}"></canvas>`;
 
-        // Ambil semua row visible (tidak hidden)
         const rows = acc.querySelectorAll('table.user-table tbody tr:not([style*="display: none"])');
         const tipeCount = {};
 
@@ -69,41 +70,118 @@ function renderUserProgress() {
 
         if (total === 0) {
             progressContainer.innerHTML = "<p><em>Tidak ada data</em></p>";
+            chartContainer.innerHTML = "<p><em>Tidak ada chart</em></p>";
             return;
         }
 
-        // Render tiap progress bar
-        Object.entries(tipeCount).forEach(([label, count]) => {
-            const percent = ((count / total) * 100).toFixed(1);
+        // Render progress bar
+        Object.keys(tipeCount).forEach(label => {
+            const count = tipeCount[label];
+            const percent = ((count / total) * 100).toFixed(2);
             const color = tipeColors[label] || "#7f8c8d";
 
             const wrapper = document.createElement("div");
             wrapper.className = "progress-group";
             wrapper.innerHTML = `
-                <div class="progress-header">
-                    <span class="progress-text">${label}</span>
-                    <span class="progress-number"><b>${count}</b>/${total} (${percent}%)</span>
-                </div>
+                <span class="progress-text">${label}</span>
+                <span class="progress-number">${percent}%</span>
                 <div class="progress sm">
-                    <div class="progress-bar" 
-                        role="progressbar" 
-                        style="width:${percent}%; background:${color}" 
-                        aria-valuenow="${percent}" aria-valuemin="0" aria-valuemax="100">
-                    </div>
+                    <div class="progress-bar" style="width:${percent}%; background:${color}"></div>
                 </div>
             `;
             progressContainer.appendChild(wrapper);
         });
+
+        // Render donut chart
+        renderUserDonut(uid, tipeCount, total);
     });
 }
 
-// Pastikan dipanggil ulang setelah filter
+// ======================
+// Render Donut Chart (Chart.js)
+// ======================
+function renderUserDonut(uid, tipeCount, total) {
+    const ctx = document.getElementById(`chart-${uid}`).getContext("2d");
+
+    const labels = Object.keys(tipeCount);
+    const data = Object.values(tipeCount);
+    const colors = labels.map(label => tipeColors[label] || "#7f8c8d");
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const val = ctx.raw;
+                            const percent = ((val / total) * 100).toFixed(2);
+                            return `${ctx.label}: ${percent}% (${val})`;
+                        }
+                    }
+                }
+            },
+            cutout: "70%"
+        }
+    });
+}
+
 function afterFilterUpdateCharts() { 
     renderUserProgress(); 
 }
 
+// ======================
+// Render Donut Chart (Chart.js)
+// ======================
+function renderUserDonut(uid, tipeCount, total) {
+    const ctx = document.getElementById(`chart-${uid}`).getContext("2d");
 
+    const labels = Object.keys(tipeCount);
+    const data = Object.values(tipeCount);
+    const colors = labels.map(label => tipeColors[label] || "#7f8c8d");
 
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const val = ctx.raw;
+                            const percent = ((val / total) * 100).toFixed(2);
+                            return `${ctx.label}: ${percent}% (${val})`;
+                        }
+                    }
+                }
+            },
+            cutout: "70%"
+        }
+    });
+}
+
+function afterFilterUpdateCharts() { 
+    renderUserProgress(); 
+}
 
 // ======================
 // EXPORT / PRINT
@@ -267,6 +345,13 @@ function exportTable(format) {
                 }
             }
 
+            // Clone progress bar asli dari accordion
+            const progressOrig = laporanAcc?.querySelector('.progress-container') 
+                                || catatanAcc?.querySelector('.progress-container');
+            if (progressOrig) {
+                block.appendChild(progressOrig.cloneNode(true));
+            }
+
             if (catatanAcc) {
                 const table = catatanAcc.querySelector('.user-table');
                 block.innerHTML += `<h3>Catatan</h3>`;
@@ -358,6 +443,32 @@ function downloadFile(content, filename, mimeType) {
 function printSemua() {
     const checked = Array.from(document.querySelectorAll('#tab-laporan .print-checkbox:checked'));
 
+    // -------------------
+    // Konfirmasi jika ga ada user dicentang
+    // -------------------
+    if (!checked.length) {
+        if (!confirm('Tidak ada user dicentang. Apakah Anda ingin mencetak semua data?')) {
+            showNotif('error', 'Proses cetak dibatalkan.');
+            return;
+        }
+    }
+
+    // -------------------
+    // Ambil userIds sesuai pilihan / semua
+    // -------------------
+    const userIds = !checked.length
+        ? [...new Set(Array.from(document.querySelectorAll('#tab-laporan .user-accordion, #tab-catatan .user-accordion'))
+            .map(acc => acc.dataset.userid).filter(Boolean))]
+        : [...new Set(checked.map(el => el.closest('.user-accordion')?.dataset?.userid).filter(Boolean))];
+
+    if (!userIds.length) {
+        showNotif('error', 'Tidak ada data untuk dicetak.');
+        return;
+    }
+
+    // -------------------
+    // Generate konten print
+    // -------------------
     function printData(userIds) {
         const wrapper = document.createElement('div');
 
@@ -383,6 +494,7 @@ function printSemua() {
                 hour: "2-digit", minute: "2-digit"
             });
 
+            // Info user
             block.innerHTML += `
                 <table class="user-info">
                     <tr><th>Nama User</th><td>${uname}</td></tr>
@@ -393,27 +505,41 @@ function printSemua() {
                 </table>
             `;
 
+            // Laporan
+            block.innerHTML += `<h3>Laporan</h3>`;
             if (laporanAcc) {
                 const table = laporanAcc.querySelector('.user-table');
-                block.innerHTML += `<h3>Laporan</h3>`;
                 if (table) block.appendChild(table.cloneNode(true));
                 else block.innerHTML += `<p><em>Tidak ada laporan.</em></p>`;
-            } else {
-                block.innerHTML += `<h3>Laporan</h3><p><em>Tidak ada laporan.</em></p>`;
+            } else block.innerHTML += `<p><em>Tidak ada laporan.</em></p>`;
+
+            // Clone progress bar asli dari accordion
+            const progressOrig = laporanAcc?.querySelector('.progress-container') 
+                                || catatanAcc?.querySelector('.progress-container');
+            if (progressOrig) {
+                block.appendChild(progressOrig.cloneNode(true));
             }
 
+            // Catatan
+            block.innerHTML += `<h3>Catatan</h3>`;
             if (catatanAcc) {
                 const table = catatanAcc.querySelector('.user-table');
-                block.innerHTML += `<h3>Catatan</h3>`;
                 if (table) block.appendChild(table.cloneNode(true));
                 else block.innerHTML += `<p><em>Tidak ada catatan.</em></p>`;
-            } else {
-                block.innerHTML += `<h3>Catatan</h3><p><em>Tidak ada catatan.</em></p>`;
-            }
+            } else block.innerHTML += `<p><em>Tidak ada catatan.</em></p>`;
 
             wrapper.appendChild(block);
             if (idx < userIds.length - 1) wrapper.appendChild(document.createElement('hr'));
         });
+
+        return wrapper;
+    }
+
+    // -------------------
+    // Run print
+    // -------------------
+    function runPrint(userIds) {
+        const wrapper = printData(userIds);
 
         const w = window.open('', 'printWindow');
         w.document.write(`<html><head><title>Print Semua</title>
@@ -428,28 +554,24 @@ function printSemua() {
                 .user-info th{width:180px;background:#f2f2f2;}
                 .user-print-block{margin-bottom:40px;page-break-inside:avoid;}
                 hr{border:none;border-top:2px solid #888;margin:40px 0;}
+                .progress-container{margin:10px 0;}
             </style>
         </head><body>`);
         w.document.write(`<h2>Laporan & Catatan</h2>`);
-        w.document.write(wrapper.innerHTML);
-        w.document.write('</body></html>');
+        w.document.body.appendChild(wrapper);
         w.document.close();
-        setTimeout(()=>{ w.print(); w.close(); }, 400);
+
+        // Auto print & close
+        setTimeout(() => {
+            w.focus();
+            w.print();
+            w.close();
+        }, 100);
     }
 
-    if (!checked.length) {
-        if (confirm('Tidak ada user dicentang. Apakah Anda ingin mencetak semua data?')) {
-            const allAcc = document.querySelectorAll('#tab-laporan .user-accordion, #tab-catatan .user-accordion');
-            const userIds = [...new Set(Array.from(allAcc).map(acc => acc.dataset.userid).filter(Boolean))];
-            printData(userIds);
-        } else {
-            showNotif('error', 'Proses cetak dibatalkan.');
-        }
-    } else {
-        const userIds = [...new Set(checked.map(el => el.closest('.user-accordion')?.dataset?.userid).filter(Boolean))];
-        printData(userIds);
-    }
+    runPrint(userIds);
 }
+
 
 
 
