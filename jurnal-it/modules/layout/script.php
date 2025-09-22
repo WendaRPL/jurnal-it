@@ -21,8 +21,15 @@ function openProfileModal() {
     modal.classList.remove('hidden');
     modal.classList.add('show');
     document.getElementById('userMenu').classList.remove('show-menu');
+    
+    // Reset selected avatar ketika modal dibuka
+    selectedAvatar = null;
+    
+    // Load foto profil saat modal dibuka
+    loadProfilePicture();
   }
 }
+
 function closeProfileModal() {
   const modal = document.getElementById('profileModal');
   if (modal) {
@@ -40,6 +47,7 @@ function openPasswordModal() {
     document.getElementById('userMenu').classList.remove('show-menu');
   }
 }
+
 function closePasswordModal() {
   const modal = document.getElementById('passwordModal');
   if (modal) {
@@ -47,9 +55,11 @@ function closePasswordModal() {
     modal.classList.remove('show');
   }
 }
+
 function resetPasswordForm() {
   document.getElementById('changePasswordForm').reset();
 }
+
 function validatePassword() {
   const newPassword = document.getElementById('newPassword').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
@@ -73,7 +83,7 @@ async function handlePasswordChange(e) {
   const newPassword = document.getElementById('newPassword').value;
 
   try {
-    const response = await fetch('direct/change_password.php', {
+    const response = await fetch('/jurnal-it/direct/change_password.php', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
@@ -131,7 +141,7 @@ async function saveField(fieldWrapper, fieldName, newValue) {
   }
 
   try {
-    const response = await fetch("direct/update_profile.php", {
+    const response = await fetch("/jurnal-it/direct/update_profile.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ field: fieldName, value: newValue })
@@ -187,6 +197,148 @@ function cleanupButtons(fieldWrapper) {
   if (editBtn) editBtn.style.display = "inline-block";
 }
 
+let selectedAvatar = null;
+
+// ==================== LOAD PROFILE PICTURE ====================
+async function loadProfilePicture() {
+  try {
+    const response = await fetch('/jurnal-it/direct/get_profile_picture.php');
+    const result = await response.json();
+    
+    if (result.success && result.profile_pic) {
+      const profilePic = document.getElementById('profilePic');
+      if (profilePic) {
+        profilePic.src = result.profile_pic + '?t=' + new Date().getTime(); // Avoid cache
+      }
+    }
+  } catch (error) {
+    console.error('Error loading profile picture:', error);
+  }
+}
+
+// ==================== USER AVATAR LOAD (NAVBAR) ====================
+async function loadNavbarAvatar() {
+  try {
+    const res = await fetch('/jurnal-it/direct/get_profile_picture.php?t=' + Date.now());
+    const data = await res.json();
+    if (data.success && data.profile_pic) {
+      const avatarEl = document.getElementById("userAvatarImg");
+      if (avatarEl) {
+        avatarEl.src = data.profile_pic + "?t=" + Date.now(); // cegah cache
+        avatarEl.onerror = () => { avatarEl.src = "/jurnal-it/uploads/user/avatar/test-avatar.jpg"; };
+      }
+    }
+  } catch (err) {
+    console.error("❌ Error load navbar avatar:", err);
+  }
+}
+
+
+// ==================== PREVIEW PROFILE PIC ====================
+function initAvatarUpload() {
+  const uploadInput = document.getElementById("uploadAvatar");
+  if (uploadInput) {
+    uploadInput.addEventListener("change", function (e) {
+      console.log("File selected:", this.files[0]);
+      
+      const file = this.files[0];
+      if (!file) return;
+
+      // Validasi tipe file
+      if (!file.type.match('image.*')) {
+        toastNotif("error", "❌ Hanya file gambar yang diizinkan!");
+        this.value = "";
+        return;
+      }
+
+      // Validasi ukuran file (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        toastNotif("error", "❌ Ukuran file terlalu besar! Maksimal 2MB.");
+        this.value = "";
+        return;
+      }
+
+      selectedAvatar = file; // simpan sementara
+      const preview = document.getElementById("profilePic");
+      if (preview) {
+        preview.src = URL.createObjectURL(file);
+      }
+
+      toastNotif("info", "ℹ️ Preview ditampilkan, klik Simpan untuk mengunggah.");
+    });
+  } else {
+    console.error("uploadAvatar element not found!");
+  }
+}
+
+// ==================== SAVE PROFILE PIC ====================
+function initAvatarSave() {
+  const saveBtn = document.getElementById("saveAvatarBtn");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", async function (e) {
+      e.preventDefault();
+      console.log("Save button clicked");
+      
+      if (!selectedAvatar) {
+        toastNotif("error", "❌ Belum ada foto yang dipilih!");
+        return;
+      }
+
+      this.disabled = true;
+      this.textContent = "Mengupload...";
+      console.log("Uploading file:", selectedAvatar.name, selectedAvatar.size);
+
+      const formData = new FormData();
+      formData.append("profile_pic", selectedAvatar);
+
+      try {
+        const res = await fetch("/jurnal-it/direct/upload_profile.php", {
+  method: "POST",
+  body: formData,
+});
+
+const text = await res.text();
+console.log("RAW RESPONSE:", text);
+
+let data;
+try {
+  data = JSON.parse(text);
+  console.log("Parsed JSON:", data);
+} catch (e) {
+  console.error("JSON parse error:", e);
+  alert("❌ Response bukan JSON, cek console log");
+  return;
+}
+
+
+        if (data.success) {
+          const preview = document.getElementById("profilePic");
+          if (preview) {
+            preview.src = data.profile_pic + "?t=" + Date.now(); // hindari cache
+          }
+          alert("success", "✅ Foto profil berhasil disimpan!");
+          selectedAvatar = null; // reset setelah berhasil upload
+          
+          // Reset input file
+          const uploadInput = document.getElementById("uploadAvatar");
+          if (uploadInput) uploadInput.value = "";
+        } else {
+          console.error("Upload failed:", data.error);
+          alert("❌ " + (data.error || "Gagal upload foto"));
+        }
+      } catch (err) {
+        console.error("Upload error:", err);
+        alert("❌ Error saat upload foto");
+      } finally {
+        this.disabled = false;
+        this.textContent = "💾 Simpan Foto";
+      }
+    });
+  } else {
+    console.error("saveAvatarBtn element not found!");
+  }
+}
+
 // ==================== CLOSE MODALS BY BACKDROP ====================
 document.addEventListener("click", e => {
   const modals = [
@@ -207,6 +359,7 @@ function toggleUserMenu() {
   const userMenu = document.getElementById("userMenu");
   if (userMenu) userMenu.classList.toggle("show-menu");
 }
+
 document.addEventListener("click", e => {
   const userMenu = document.getElementById("userMenu");
   if (userMenu && !e.target.closest(".user-dropdown")) {
@@ -245,7 +398,7 @@ async function fetchNotifications() {
     notifList.innerHTML = `
       <div class="notif-error">
         <p>❌ Gagal memuat notifikasi</p>
-        <small>${err.message}</small><br>
+        <small>${err.message}</small>
         <button onclick="fetchNotifications()">🔄 Coba Lagi</button>
       </div>`;
   }
@@ -318,6 +471,24 @@ async function updateUnreadCounter() {
 
 // ==================== INIT ====================
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded, initializing...");
+  
+  // Inisialisasi event listeners
+  const passwordForm = document.getElementById('changePasswordForm');
+  if (passwordForm) {
+    passwordForm.addEventListener('submit', handlePasswordChange);
+  }
+  
+  // Inisialisasi avatar upload dan save - PASTIKAN INI DIPANGGIL
+  initAvatarUpload();
+  initAvatarSave();
+  
+  console.log("Avatar functions initialized");
+
+  // Init avatar navbar
+loadNavbarAvatar();
+  
+  // Inisialisasi notifikasi
   notifCount = document.getElementById("notifCount");
   notifList = document.getElementById("notifList");
   markReadBtn = document.getElementById("markReadBtn");
@@ -325,16 +496,48 @@ document.addEventListener("DOMContentLoaded", () => {
   openInbox = document.getElementById("openInbox");
   closeInbox = document.getElementById("closeInbox");
 
-  if (openInbox && inboxModal) openInbox.addEventListener("click", () => { inboxModal.classList.remove("hidden"); inboxModal.classList.add("show"); fetchNotifications(); });
-  if (closeInbox && inboxModal) closeInbox.addEventListener("click", () => { inboxModal.classList.add("hidden"); inboxModal.classList.remove("show"); });
-  if (markReadBtn) markReadBtn.addEventListener("click", markAllAsRead);
-  if (inboxModal) inboxModal.addEventListener("click", e => { if (e.target === inboxModal) { inboxModal.classList.add("hidden"); inboxModal.classList.remove("show"); } });
+  if (openInbox && inboxModal) {
+    openInbox.addEventListener("click", () => { 
+      inboxModal.classList.remove("hidden"); 
+      inboxModal.classList.add("show"); 
+      fetchNotifications(); 
+    });
+  }
+  
+  if (closeInbox && inboxModal) {
+    closeInbox.addEventListener("click", () => { 
+      inboxModal.classList.add("hidden"); 
+      inboxModal.classList.remove("show"); 
+    });
+  }
+  
+  if (markReadBtn) {
+    markReadBtn.addEventListener("click", markAllAsRead);
+  }
+  
+  if (inboxModal) {
+    inboxModal.addEventListener("click", e => { 
+      if (e.target === inboxModal) { 
+        inboxModal.classList.add("hidden"); 
+        inboxModal.classList.remove("show"); 
+      } 
+    });
+  }
 
-  if (notifList) fetchNotifications();
-  setInterval(() => { if (inboxModal && !inboxModal.classList.contains("hidden")) fetchNotifications(); }, 30000);
+  if (notifList) {
+    fetchNotifications();
+  }
+  
+  setInterval(() => { 
+    if (inboxModal && !inboxModal.classList.contains("hidden")) {
+      fetchNotifications(); 
+    }
+  }, 30000);
 
   // test notif
-  toastNotif("success", "✅ Notifikasi siap dipakai!");
+  setTimeout(() => {
+    toastNotif("success", "✅ Sistem siap digunakan!");
+  }, 1000);
 });
 
 // ==================== BREADCRUMB ====================

@@ -75,8 +75,8 @@
       <div class="user-info" style="display:flex; align-items:center; gap:10px;">
         <span style="color:<?= $roleColor ?>; font-weight:bold;"><?= $roleName ?></span>
         <div class="user-dropdown">
-          <div class="user-avatar" onclick="toggleUserMenu()">
-            <i class="fas fa-user"></i>
+          <div class="user-avatar user-dropdown" onclick="toggleUserMenu()">
+            <img id="userAvatarImg" src="/jurnal-it/uploads/user/avatar/test-avatar.jp  g" alt="User Avatar">
           </div>
           <div class="user-menu" id="userMenu">
             <p>Halo, <?= $_SESSION['name'] ?? 'User'; ?></p>
@@ -101,9 +101,20 @@
     </div>
 
     <div class="profile-content">
-      <div class="profile-avatar">
-        <i class="fas fa-user-circle"></i>
+      <div class="avatar-wrapper">
+        <img id="profilePic" src="/assets/img/avatar-default.png" alt="Avatar">
+        <input type="file" id="uploadAvatar" accept="image/*">
+        <label for="uploadAvatar" class="avatar-edit">
+          <i class="fas fa-camera"></i>
+        </label>
       </div>
+      <p class="avatar-caption">Klik kamera untuk ganti foto</p>
+
+      <!-- tombol save foto -->
+      <div class="avatar-actions">
+        <button id="saveAvatarBtn" class="save-avatar-btn">💾 Simpan Foto</button>
+      </div>
+
 
       <div class="profile-info">
         <!-- Nama -->
