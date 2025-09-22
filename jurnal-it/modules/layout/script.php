@@ -497,6 +497,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (passwordForm) { passwordForm.addEventListener("submit", handlePasswordChange); 
   }
 
+  loadNavbarAvatar();
+  
   // Inisialisasi variabel
   notifCount = document.getElementById("notifCount");
   notifList = document.getElementById("notifList");
@@ -558,4 +560,5 @@ function adjustBreadcrumb() {
 }
 window.addEventListener("load", adjustBreadcrumb);
 window.addEventListener("resize", adjustBreadcrumb);
+
 </script>
