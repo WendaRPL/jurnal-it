@@ -76,7 +76,7 @@
         <span style="color:<?= $roleColor ?>; font-weight:bold;"><?= $roleName ?></span>
         <div class="user-dropdown">
           <div class="user-avatar user-dropdown" onclick="toggleUserMenu()">
-            <img id="userAvatarImg" src="/jurnal-it/uploads/user/avatar/test-avatar.jp  g" alt="User Avatar">
+            <img id="userAvatarImg" src="/jurnal-it/uploads/user/avatar/test-avatar.jpg" alt="User Avatar">
           </div>
           <div class="user-menu" id="userMenu">
             <p>Halo, <?= $_SESSION['name'] ?? 'User'; ?></p>
@@ -102,7 +102,7 @@
 
     <div class="profile-content">
       <div class="avatar-wrapper">
-        <img id="profilePic" src="/assets/img/avatar-default.png" alt="Avatar">
+        <img id="profilePic" src="/jurnal-it/uploads/user/avatar/test-avatar.jpg" alt="Avatar">
         <input type="file" id="uploadAvatar" accept="image/*">
         <label for="uploadAvatar" class="avatar-edit">
           <i class="fas fa-camera"></i>

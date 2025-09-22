@@ -1,18 +1,31 @@
 <script>
-// ==================== TOAST NOTIFICATION ====================
-function toastNotif(type, message) {
-  let container = document.querySelector('.toast-container');
+// ==================== TOAST/NOTIFICATION ====================
+function showNotif(type, message) {
+  let container = document.querySelector(".notif-container");
   if (!container) {
-    container = document.createElement('div');
-    container.className = 'toast-container';
+    container = document.createElement("div");
+    container.className = "notif-container";
     document.body.appendChild(container);
   }
-  const notif = document.createElement('div');
-  notif.className = `toast ${type}`;
+
+  // bikin notif baru
+  const notif = document.createElement("div");
+  notif.className = `notif ${type}`; // ex: notif success / notif error
   notif.textContent = message;
+
   container.appendChild(notif);
-  setTimeout(() => { notif.remove(); if (!container.querySelector('.toast')) container.remove(); }, 4000);
+
+  // auto remove setelah animasi selesai
+  // (4000ms = 0.4s slideIn + 3.5s delay + 0.6s fadeOut)
+  setTimeout(() => {
+    notif.remove();
+    if (!container.querySelector(".notif")) {
+      container.remove();
+    }
+  }, 4200); // kasih sedikit buffer
 }
+
+
 
 // ==================== PROFILE MODAL ====================
 function openProfileModal() {
@@ -65,11 +78,11 @@ function validatePassword() {
   const confirmPassword = document.getElementById('confirmPassword').value;
 
   if (newPassword !== confirmPassword) {
-    toastNotif("error", "Password baru dan konfirmasi tidak cocok!");
+    showNotif("error", "Password baru dan konfirmasi tidak cocok!");
     return false;
   }
   if (newPassword.length < 6) {
-    toastNotif("error", "Password minimal 6 karakter!");
+    showNotif("error", "Password minimal 6 karakter!");
     return false;
   }
   return true;
@@ -91,15 +104,15 @@ async function handlePasswordChange(e) {
 
     const result = await response.json();
     if (result.success) {
-      toastNotif("success", "✅ Password berhasil diubah!");
+      showNotif("success", "✅ Password berhasil diubah!");
       resetPasswordForm();
       closePasswordModal();
     } else {
-      toastNotif("error", "❌ " + (result.error || "Gagal mengubah password"));
+      showNotif("error", "❌ " + (result.error || "Gagal mengubah password"));
     }
   } catch (err) {
     console.error(err);
-    toastNotif("error", "❌ Error saat ubah password");
+    showNotif("error", "❌ Error saat ubah password");
   }
 }
 
@@ -167,13 +180,13 @@ async function saveField(fieldWrapper, fieldName, newValue) {
         if (initialSpan) initialSpan.textContent = newValue;
       }
 
-      toastNotif("success", `✅ ${fieldName} berhasil diperbarui`);
+      showNotif("success", `✅ Nama berhasil diperbarui`);
     } else {
-      toastNotif("error", "❌ Gagal update: " + (result.error || "Unknown error"));
+      showNotif("error", "❌ Gagal update: " + (result.error || "Unknown error"));
     }
   } catch (error) {
     console.error("❌ Error update field:", error);
-    toastNotif("error", "❌ Terjadi error saat update profil");
+    showNotif("error", "❌ Terjadi error saat update profil");
   } finally {
     if (saveBtn) {
       saveBtn.disabled = false;
@@ -246,14 +259,14 @@ function initAvatarUpload() {
 
       // Validasi tipe file
       if (!file.type.match('image.*')) {
-        toastNotif("error", "❌ Hanya file gambar yang diizinkan!");
+        showNotif("error", "❌ Hanya file gambar yang diizinkan!");
         this.value = "";
         return;
       }
 
       // Validasi ukuran file (max 2MB)
       if (file.size > 2 * 1024 * 1024) {
-        toastNotif("error", "❌ Ukuran file terlalu besar! Maksimal 2MB.");
+        showNotif("error", "❌ Ukuran file terlalu besar! Maksimal 2MB.");
         this.value = "";
         return;
       }
@@ -264,7 +277,7 @@ function initAvatarUpload() {
         preview.src = URL.createObjectURL(file);
       }
 
-      toastNotif("info", "ℹ️ Preview ditampilkan, klik Simpan untuk mengunggah.");
+      showNotif("info", "ℹ️ Preview ditampilkan, klik Simpan untuk mengunggah.");
     });
   } else {
     console.error("uploadAvatar element not found!");
@@ -280,7 +293,7 @@ function initAvatarSave() {
       console.log("Save button clicked");
       
       if (!selectedAvatar) {
-        toastNotif("error", "❌ Belum ada foto yang dipilih!");
+        showNotif("error", "❌ Belum ada foto yang dipilih!");
         return;
       }
 
@@ -306,7 +319,7 @@ try {
   console.log("Parsed JSON:", data);
 } catch (e) {
   console.error("JSON parse error:", e);
-  alert("❌ Response bukan JSON, cek console log");
+  showNotif("❌ Response bukan JSON, cek console log");
   return;
 }
 
@@ -316,7 +329,7 @@ try {
           if (preview) {
             preview.src = data.profile_pic + "?t=" + Date.now(); // hindari cache
           }
-          alert("success", "✅ Foto profil berhasil disimpan!");
+          showNotif("success", "✅ Foto profil berhasil disimpan!");
           selectedAvatar = null; // reset setelah berhasil upload
           
           // Reset input file
@@ -324,11 +337,11 @@ try {
           if (uploadInput) uploadInput.value = "";
         } else {
           console.error("Upload failed:", data.error);
-          alert("❌ " + (data.error || "Gagal upload foto"));
+          showNotif("❌ " + (data.error || "Gagal upload foto"));
         }
       } catch (err) {
         console.error("Upload error:", err);
-        alert("❌ Error saat upload foto");
+        showNotif("❌ Error saat upload foto");
       } finally {
         this.disabled = false;
         this.textContent = "💾 Simpan Foto";
@@ -430,8 +443,14 @@ function renderNotifications(data) {
 }
 
 function updateUnreadCount(data) {
-  if (!notifCount) return;
+  if (!notifCount) {
+    console.error("notifCount element not found!");
+    return;
+  }
+  
   const unread = Array.isArray(data) ? data.filter(i => i.is_read == 0).length : (data.unread_count || 0);
+  console.log("Unread count:", unread);
+  
   notifCount.textContent = unread > 0 ? unread : "";
   notifCount.style.display = unread > 0 ? "flex" : "none";
 }
@@ -472,23 +491,13 @@ async function updateUnreadCounter() {
 // ==================== INIT ====================
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM loaded, initializing...");
-  
-  // Inisialisasi event listeners
-  const passwordForm = document.getElementById('changePasswordForm');
-  if (passwordForm) {
-    passwordForm.addEventListener('submit', handlePasswordChange);
-  }
-  
-  // Inisialisasi avatar upload dan save - PASTIKAN INI DIPANGGIL
-  initAvatarUpload();
-  initAvatarSave();
-  
-  console.log("Avatar functions initialized");
 
-  // Init avatar navbar
-loadNavbarAvatar();
-  
-  // Inisialisasi notifikasi
+  // Inisialisasi event listeners
+  const passwordForm = document.getElementById("changePasswordForm"); 
+  if (passwordForm) { passwordForm.addEventListener("submit", handlePasswordChange); 
+  }
+
+  // Inisialisasi variabel
   notifCount = document.getElementById("notifCount");
   notifList = document.getElementById("notifList");
   markReadBtn = document.getElementById("markReadBtn");
@@ -496,48 +505,46 @@ loadNavbarAvatar();
   openInbox = document.getElementById("openInbox");
   closeInbox = document.getElementById("closeInbox");
 
-  if (openInbox && inboxModal) {
-    openInbox.addEventListener("click", () => { 
-      inboxModal.classList.remove("hidden"); 
-      inboxModal.classList.add("show"); 
-      fetchNotifications(); 
-    });
-  }
-  
-  if (closeInbox && inboxModal) {
-    closeInbox.addEventListener("click", () => { 
-      inboxModal.classList.add("hidden"); 
-      inboxModal.classList.remove("show"); 
-    });
-  }
-  
-  if (markReadBtn) {
-    markReadBtn.addEventListener("click", markAllAsRead);
-  }
-  
-  if (inboxModal) {
-    inboxModal.addEventListener("click", e => { 
-      if (e.target === inboxModal) { 
-        inboxModal.classList.add("hidden"); 
-        inboxModal.classList.remove("show"); 
-      } 
-    });
+  // Pastikan semua elemen ditemukan
+  if (!notifCount || !notifList || !markReadBtn || !inboxModal || !openInbox || !closeInbox) {
+    console.error("Salah satu elemen notifikasi tidak ditemukan!");
+    return;
   }
 
-  if (notifList) {
+  // Event listener untuk membuka modal - SESUAIKAN DENGAN CSS ANDA
+  openInbox.addEventListener("click", () => {
+    inboxModal.classList.add("show"); // Hanya perlu menambahkan kelas 'show'
     fetchNotifications();
-  }
-  
-  setInterval(() => { 
-    if (inboxModal && !inboxModal.classList.contains("hidden")) {
-      fetchNotifications(); 
+  });
+
+  // Event listener untuk menutup modal
+  closeInbox.addEventListener("click", () => {
+    inboxModal.classList.remove("show"); // Hanya perlu menghapus kelas 'show'
+  });
+
+  // Event listener untuk menutup modal dengan klik di luar
+  inboxModal.addEventListener("click", (e) => {
+    if (e.target === inboxModal) {
+      inboxModal.classList.remove("show");
+    }
+  });
+
+  // Event listener untuk menandai semua sebagai dibaca
+  markReadBtn.addEventListener("click", markAllAsRead);
+
+  // Load notifikasi pertama kali
+  fetchNotifications();
+  updateUnreadCounter();
+
+  // Refresh notifikasi setiap 30 detik jika modal terbuka
+  setInterval(() => {
+    if (inboxModal.classList.contains("show")) {
+      fetchNotifications();
     }
   }, 30000);
 
-  // test notif
-  setTimeout(() => {
-    toastNotif("success", "✅ Sistem siap digunakan!");
-  }, 1000);
+  // Refresh badge count setiap 15 detik
+  setInterval(updateUnreadCounter, 15000);
 });
 
 // ==================== BREADCRUMB ====================

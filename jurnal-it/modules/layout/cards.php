@@ -60,7 +60,7 @@ require_once "direct/config.php"; // koneksi database
         $query_user = "
             SELECT 
                 u.id,                         
-                u.name,
+                u.username,
                 u.name AS user_name,
                 COUNT(DISTINCT th.id) AS total_laporan,
                 COUNT(DISTINCT tc.id) AS total_catatan,
@@ -74,7 +74,7 @@ require_once "direct/config.php"; // koneksi database
             LEFT JOIN transaksi_catatan tc 
                 ON u.id = tc.user_id AND tc.approved IS NULL
             WHERE u.role_id = ?
-            GROUP BY u.id, u.name, u.name
+            GROUP BY u.id, u.username, u.name
             HAVING total_laporan > 0 OR total_catatan > 0
             ORDER BY last_date DESC
         ";
@@ -113,7 +113,7 @@ require_once "direct/config.php"; // koneksi database
         </div>
         <a href="approval.php" class="card-footer">
             <div style="padding-left: 6px">Lihat Semua Pending</div>
-            <div class="line" style="padding-right: 8px">➜</div>
+            <div style="padding-right: 8px">➜</div>
         </a>
     </div>
 
@@ -135,60 +135,85 @@ require_once "direct/config.php"; // koneksi database
 
 
     <!-- Card Laporan Terbaru (Hanya untuk SPV & User) -->
-    <?php if ($role_id == 2 || $role_id == 3): ?>
-    <div class="card-report card">
-        <div class="card-header">Laporan Terbaru<abbr style="font-size: 14px;"><?php echo $_SESSION['name']; ?></abbr></div>
-        <div class="reports-container">
-            <?php
-            // Ambil 7 laporan terbaru milik user ini
-            $sql = "
-                SELECT 
-                    th.id,
-                    th.date,
-                    DATE_FORMAT(th.date, '%d %b %Y')   AS formatted_date,
-                    TIME_FORMAT(th.start_time,'%H:%i') AS start_time,
-                    TIME_FORMAT(th.end_time,  '%H:%i') AS end_time,
-                    th.deskripsi,
-                    th.approved,
-                    tp.description AS tipe_pekerjaan
-                FROM transaksi_harian th
-                LEFT JOIN tipe_pekerjaan tp ON th.tipe_id = tp.id
-                WHERE th.user_id = ?
-                ORDER BY th.date DESC, th.start_time DESC
-                LIMIT 7
-            ";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "i", $user_id);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-            $reports = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-            if (empty($reports)) {
-                echo '<div class="empty">Tidak ada laporan terbaru.</div>';
-            } else {
-                foreach ($reports as $report):
-                    $status = $report['approved'] ? 'Approved' : 'Pending';
-            ?>
-            <div class="report-item">
-                <div class="report-title"><?= htmlspecialchars($report['deskripsi']) ?></div>
-                <div class="report-meta">
-                    <span class="report-date">
-                        <?= $report['formatted_date'] ?> | 
-                        <?= $report['start_time'] ?> - <?= $report['end_time'] ?>
-                    </span>
-                    <span class="report-type"><?= htmlspecialchars($report['tipe_pekerjaan']) ?></span>
-                </div>
-                <div class="report-footer">
-                    <span class="report-status <?= strtolower($status) ?>"><?= $status ?></span>
-                </div>
-            </div>
-            <?php
-                endforeach;
-            }
-            ?>
-        </div>
+<?php if ($role_id == 2 || $role_id == 3): ?>
+<div class="card-report card">
+    <div class="card-header">
+        Laporan Terbaru (7 Terbaru)<abbr style="font-size: 14px;"><?php echo htmlspecialchars($_SESSION['name']); ?></abbr>
     </div>
-    <?php endif; ?>
+    <div class="reports-container">
+        <?php
+        // Ambil 7 laporan terbaru milik user ini
+        $sql = "
+            SELECT 
+                th.id,
+                th.date,
+                DATE_FORMAT(th.date, '%d %b %Y')   AS formatted_date,
+                TIME_FORMAT(th.start_time,'%H:%i') AS start_time,
+                TIME_FORMAT(th.end_time,  '%H:%i') AS end_time,
+                th.deskripsi,
+                th.approved,
+                tp.description AS tipe_pekerjaan
+            FROM transaksi_harian th
+            LEFT JOIN tipe_pekerjaan tp ON th.tipe_id = tp.id
+            WHERE th.user_id = ?
+            ORDER BY th.date DESC, th.start_time DESC
+            LIMIT 7
+        ";
+
+        $reports = [];
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("i", $user_id);
+            if ($stmt->execute()) {
+                $res = $stmt->get_result();
+                if ($res) {
+                    $reports = $res->fetch_all(MYSQLI_ASSOC);
+                }
+            }
+            $stmt->close();
+        }
+
+        // Filter: cuma NULL (Pending) & 1 (Approved)
+        $validReports = array_filter($reports, function($r) {
+            return is_null($r['approved']) || (int)$r['approved'] === 1;
+        });
+
+        if (empty($validReports)) {
+            echo '<div class="empty">Tidak ada laporan terbaru.</div>';
+        } else {
+            foreach ($validReports as $report):
+                $approved = $report['approved'];
+
+                if (is_null($approved)) {
+                    $status = 'Pending';
+                    $statusClass = 'pending';
+                } else {
+                    $status = 'Approved';
+                    $statusClass = 'approved';
+                }
+        ?>
+        <div class="report-item">
+            <div class="report-title"><?= htmlspecialchars($report['deskripsi']) ?></div>
+            <div class="report-meta">
+                <span class="report-date">
+                    <?= htmlspecialchars($report['formatted_date']) ?> |
+                    <?= htmlspecialchars($report['start_time']) ?> - <?= htmlspecialchars($report['end_time']) ?>
+                </span>
+                <span class="report-type"><?= htmlspecialchars($report['tipe_pekerjaan']) ?></span>
+            </div>
+            <div class="report-footer">
+                <span class="report-status <?= htmlspecialchars($statusClass) ?>">
+                    <?= htmlspecialchars($status) ?>
+                </span>
+            </div>
+        </div>
+        <?php
+            endforeach;
+        }
+        ?>
+    </div>
+</div>
+<?php endif; ?>
+
 
 
     <!-- Card Statistik Cepat (Hanya SPV & User) -->
