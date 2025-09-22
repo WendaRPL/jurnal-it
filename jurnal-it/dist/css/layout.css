@@ -14,12 +14,6 @@ html, body {
   color: var(--white);
 }
 
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 .main-content {
   padding: 2rem;
   flex: 1;
@@ -37,10 +31,10 @@ html, body {
 
 .nav {
   background: var(--dark);
-  grid-template-columns: 1fr auto; /* 🔥 Kiri: breadcrumb, Kanan: icons */
+  grid-template-columns: 1fr auto;
   border-bottom: 2px solid var(--cyan);
   padding: 0 2rem;
-  height: 64px; /* fix tinggi navbar */
+  height: 64px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -64,9 +58,9 @@ nav h1 {
   display: flex;
   align-items: center;
   gap: 20px;
-  flex-shrink: 0; /* 🔥 Jangan kepencet */
+  flex-shrink: 0;
   min-width: fit-content;
-  height: 30px; /* 🔥 Fixed height untuk consistency */
+  height: 30px;
 }
 
 .nav-icons {
@@ -118,76 +112,466 @@ nav h1 {
   box-shadow: 0 0 6px rgba(255, 0, 0, 0.8);
 }
 
-/* ======================== */
-/*      INBOX MODAL FIX     */
-/* ======================== */
+/* ==================== MODAL INBOX ==================== */
 .modal-inbox {
   display: none;
   position: fixed;
-  z-index: 1000;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
 }
-
 .modal-inbox.show {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 .modal-inbox-content {
-  background: #111;
-  color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  max-height: 80vh;
-  overflow-y: auto;
-  border: 1px solid var(--cyan);
-  box-shadow: 0 0 20px #00ffff88;
-  animation: fadeIn 0.3s ease;
+  background: #212121;
+  color: #eee;
+  border-radius: 12px;
+  width: 90%; max-width: 450px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  animation: slideDown 0.25s ease;
+  overflow: hidden;
 }
-
-.close-inbox {
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal-inbox-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--cyan, #00f7ff);
+  color: #000;
+  font-weight: bold;
+}
+.modal-inbox-close {
+  font-size: 20px;
   cursor: pointer;
-  float: right;
-  font-size: 1.5rem;
-  color: #ff4444;
-  transition: transform 0.2s ease;
+  transition: 0.2s;
+  color: #000;
 }
-
-.close-inbox:hover {
+.modal-inbox-close:hover {
+  color: red;
   transform: scale(1.2);
-  color: #ff0000;
+}
+.modal-inbox-body {
+  padding: 15px;
+  flex: 1;
+  overflow-y: auto;
 }
 
-
-/* ===================== */
-/* NOTIFICATION ITEM     */
-/* ===================== */
+/* ==================== NOTIFIKASI ==================== */
+.notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .notif-item {
-  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
   margin-bottom: 8px;
-  border-radius: 5px;
-  background: #1a1a1a;
-  transition: background 0.3s ease;
+  border-radius: 6px;
+  background: #1e1e1e;
+  border-left: 5px solid transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  transition: background 0.2s, transform 0.2s;
   cursor: pointer;
-  border-left: 4px solid #00ffff;
+}
+.notif-item:hover { 
+  background: #2a2a2a; 
+  transform: translateX(2px);
+}
+.notif-item.unread { 
+  background: #242f3d; 
+  font-weight: 500; 
+}
+.notif-content {
+  flex: 1;
+}
+.notif-title { 
+  font-size: 14px; 
+  font-weight: 600; 
+  color: #f1f1f1; 
+  margin-bottom: 4px;
+}
+.notif-desc { 
+  font-size: 13px; 
+  color: #bbb; 
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.notif-time { 
+  font-size: 12px; 
+  color: #888; 
+}
+.notif-actions .notif-read-btn {
+  background: transparent; 
+  border: 1px solid var(--yellow); 
+  color: var(--yellow);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+.notif-actions .notif-read-btn:hover { 
+  background: var(--yellow);
+  color: #000;
 }
 
-.notif-item:hover {
-  background: #222;
+/* Warna berdasarkan type */
+.notif-item.info { border-left-color: #3498db; }
+.notif-item.success { border-left-color: #2ecc71; }
+.notif-item.warning { border-left-color: #f1c40f; }
+.notif-item.error { border-left-color: #e74c3c; }
+.notif-item.update { border-left-color: #9b59b6; }
+
+/* ===================== */
+/* PROFILE MODAL STYLES  */
+/* ===================== */
+.profile-content {
+  padding: 20px;
 }
 
-.notif-item.info { border-left-color: #00ffff; }
-.notif-item.success { border-left-color: #00ff00; }
-.notif-item.warning { border-left-color: #ffcc00; }
-.notif-item.error { border-left-color: #ff3333; }
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+.profile-avatar i {
+  font-size: 64px;
+  color: var(--cyan);
+}
+
+.profile-avatar img {
+  max-width: 160px;
+  max-height: 160px;
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+/* ===== Info Fields ===== */
+.profile-info {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+}
+
+.profile-field:last-child {
+  border-bottom: none;
+}
+
+.profile-field label {
+  font-weight: bold;
+  color: #ccc;
+  min-width: 90px; /* biar rata */
+  flex-shrink: 0;
+}
+
+.profile-field span,
+.profile-field input {
+  color: #fff;
+  flex: 1;
+  font-size: 14px;
+}
+
+.profile-field input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #f1f1f1;
+  transition: all 0.2s;
+}
+
+.profile-field input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  background: #303030;
+}
+
+/* ===== Action Buttons ===== */
+.edit-btn {
+  background: transparent;
+  border: none;
+  color: var(--cyan);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.save-btn {
+  background: var(--cyan);
+  border: none;
+  color: #000;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.2s;
+}
+
+.save-btn:hover {
+  background: #00ffff;
+}
+
+.cancel-btn {
+  background: #555;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #777;
+}
+
+/* ===== Responsive Mobile ===== */
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 15px;
+  }
+
+  .profile-avatar img {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .profile-field {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .profile-field label {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-content {
+    padding: 12px;
+  }
+
+  .profile-avatar img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .profile-field span,
+  .profile-field input {
+    font-size: 13px;
+  }
+}
+
+
+
+/* ===================== */
+/* PASSWORD FORM STYLES  */
+/* ===================== */
+.change-password-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: #1b1b1b;
+  border-radius: 10px;
+  border: 1px solid #333;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.change-password-section h3 {
+  margin-bottom: 20px;
+  color: var(--cyan);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  margin: 10px 12px 10px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ccc;
+}
+
+.form-group input {
+  padding: 10px 12px;
+  margin: 10px 12px 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: #f1f1f1;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  background: #303030;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.submit-password-btn,
+.cancel-password-btn {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Submit button */
+.submit-password-btn {
+  background: var(--cyan);
+  color: #000;
+  border: none;
+}
+
+.submit-password-btn:hover {
+  background: #00e5ff;
+  transform: translateY(-1px);
+}
+
+/* Cancel button */
+.cancel-password-btn {
+  background: #555;
+  color: #fff;
+  border: none;
+}
+
+.cancel-password-btn:hover {
+  background: #666;
+  transform: translateY(-1px);
+}
+
+/* ===================== */
+/* PROFILE ACTIONS       */
+/* ===================== */
+.profile-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.profile-btn {
+  background: var(--cyan);
+  color: #000;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile-btn:hover {
+  background: #00ffff;
+}
+
+.logout-btn {
+  background: #ff4757;
+  color: white;
+}
+
+.logout-btn:hover {
+  background: #ff6b7a;
+}
+
+/* ===================== */
+/* FOOTER                */
+/* ===================== */
+.modal-inbox-footer {
+  padding: 12px 15px;
+  border-top: 1px solid #333;
+  background: #1c1c1c;
+  text-align: right;
+}
+.mark-read-btn {
+  background: var(--cyan, #00f7ff);
+  border: none; 
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+}
+.mark-read-btn:hover { 
+  background: #00d9e6; 
 }
 
 /* ===================== */
@@ -196,74 +580,72 @@ nav h1 {
 .user-dropdown {
   position: relative;
 }
-
 .user-avatar {
-  background: var(--light-gray);
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cyan);
-  cursor: pointer;
 }
 
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+}
 .user-menu {
   display: none;
   position: absolute;
-  right: 0;
-  top: 50px;
-  background: var(--gray);
-  border: 1px solid var(--light-gray);
+  right: 0; top: 50px;
+  background: #2a2a2a;
+  border: 1px solid #444;
   border-radius: 6px;
-  min-width: 180px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 100;
-  align-items: start;
+  min-width: 200px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  overflow: hidden;
 }
-
-.user-menu a, 
-#text {
-  display: flex;
-  align-items: start !important;
-  gap: 10px;
-  padding: 10px;
+.user-menu a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 15px;
   color: var(--white);
   text-decoration: none;
   transition: background 0.2s;
+  font-size: 14px;
 }
-
-.user-menu a:hover {
-  background: rgba(0,255,255,0.1);
+.user-menu a:hover { 
+  background: rgba(0,255,255,0.1); 
 }
-
 .user-menu hr {
   margin: 5px 0;
   border: none;
-  border-top: 1px solid var(--light-gray);
+  border-top: 1px solid #444;
 }
-
-.user-menu a.logout {
-  color: #ff4d4d;
+.user-menu a.logout { 
+  color: #ff4d4d; 
 }
-
+.user-menu a.logout:hover {
+  background: rgba(255, 77, 77, 0.1);
+}
 .user-menu p {
-  margin: 0;
-  padding: 10px;
-  border-bottom: 1px solid var(--light-gray);
-  font-size: 0.9rem;
+  margin: 0; padding: 12px 15px;
+  border-bottom: 1px solid #444;
+  font-size: 14px;
   color: var(--cyan);
-  justify-content: start !important;
-  text-align: start !important;
+  font-weight: bold;
 }
-
-.show-menu {
-  display: block;
-}
+.show-menu { display: block; }
 
 /* ===================== */
-/* FOOTER                */
+/* PAGE FOOTER           */
 /* ===================== */
 .footer {
   width: 100%;
@@ -274,16 +656,331 @@ nav h1 {
   border-top: 1px solid var(--cyan);
 }
 
+/* ===========================
+   AVATAR / UPLOAD PREVIEW
+   =========================== */
+
+/* wrapper untuk avatar + tombol edit */
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0; /* kasih spasi atas bawah biar gak nempel */
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  min-width: 64px;
+  min-height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1b1b1b 0%, #121212 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 2px solid rgba(255,255,255,0.03);
+}
+
+/* gambar avatar */
+.avatar-wrapper img#profilePic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* default placeholder when no image */
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 34px;
+  color: rgba(255,255,255,0.9);
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+
+/* small caption under avatar (optional) */
+.avatar-caption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #b9c7cf;
+  text-align: center;
+}
+
+/* hide the native file input */
+.avatar-wrapper input[type="file"]#uploadAvatar {
+  display: none;
+}
+
+/* overlay edit button (camera icon) */
+.avatar-edit {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(180deg, var(--cyan, #00f7ff), #00c7dd);
+  color: #000;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+  border: 2px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease;
+  font-size: 14px;
+}
+
+.avatar-edit:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.5);
+}
+
+.avatar-actions {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.save-avatar-btn {
+  background: var(--cyan, #00f7ff);
+  border: none;
+  color: #000;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 14px;
+}
+
+.save-avatar-btn:hover {
+  background: #00d9e6;
+}
+
+
+/* responsive: kecilkan avatar di mobile */
+@media (max-width: 480px) {
+  .avatar-wrapper { width: 72px; height: 72px; }
+  .avatar-edit { width: 28px; height: 28px; font-size: 12px; }
+  .avatar-caption { font-size: 12px; }
+}
+
+
+
 /* ===================== */
 /* RESPONSIVE            */
 /* ===================== */
 @media (max-width: 768px) {
-  .nav {
-    padding-left: 10px;
-    padding-right: 10px;
+  .breadcrumb-item {
+    margin-top: 5px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
   }
 
-  .nav-icons {
-    gap: 0;
+  .nav { 
+    padding: 0 10px; 
+    height: auto;
+    flex-wrap: wrap;
   }
+  
+  .nav-icons { 
+    gap: 10px; 
+  }
+  
+  .modal-inbox-content {
+    width: 95%;
+    margin: 10px;
+  }
+  
+  .profile-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .profile-field {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .user-menu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    min-width: auto;
+    max-height: 30vh;    /* maksimal tinggi 70% layar */
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch; /* biar scroll mulus di iOS */
+    -webkit-border-radius: 12px 12px 0 0;
+    -moz-border-radius: 12px 12px 0 0;
+    -ms-border-radius: 12px 12px 0 0;
+    -o-border-radius: 12px 12px 0 0;
+}
+
+  .user-info {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-item {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    text-align: center; /* biar rapih di mobile */
+  }
+
+  .inbox-tabs {
+    flex-direction: column;
+  }
+  
+  .inbox-tab-btn {
+    border-radius: 0;
+  }
+  
+  .profile-content {
+    padding: 15px;
+  }
+  
+  .change-password-section {
+    padding: 12px;
+  }
+
+  .user-info {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    text-align: center; /* biar rapih di mobile */
+  }
+
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* =========================
+   UX HELPERS (Spinner, misc)
+   ========================= */
+
+/* fallback alias (kalau ada code lain yg pakai notif-container) */
+.notif-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 6000;
+}
+
+/* Toast container sudah ada, ini sedikit polish */
+.toast-container {
+  pointer-events: none; /* klik melewati toast */
+}
+.toast-container .toast {
+  pointer-events: auto; /* tapi klik pada toast sendiri masih bisa jika perlu */
+  box-sizing: border-box;
+  padding-right: 44px; /* space buat spinner / ikon kalau mau */
+}
+
+/* Save button — loading state (spinner on the right) */
+.save-btn.loading,
+.save-btn.loading:hover {
+  cursor: default;
+  opacity: 0.95;
+  transform: none;
+}
+
+/* small spinner placed inside the button (right side) */
+.save-btn.loading {
+  position: relative;
+  color: #000;
+}
+
+/* spinner */
+.save-btn.loading::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.12);
+  border-top-color: rgba(0,0,0,0.6);
+  animation: _btn-spin 0.8s linear infinite;
+  box-shadow: none;
+}
+
+/* alternative for dark buttons (if needed) */
+.save-btn.loading.dark::after {
+  border: 2px solid rgba(255,255,255,0.12);
+  border-top-color: rgba(255,255,255,0.9);
+}
+
+/* spinner keyframes */
+@keyframes _btn-spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* tiny accessible focus styles for buttons created dynamically */
+.save-btn:focus,
+.cancel-btn:focus,
+.edit-btn:focus {
+  outline: 2px solid rgba(0,255,255,0.12);
+  outline-offset: 2px;
+  box-shadow: 0 0 6px rgba(0,255,255,0.06);
+}
+
+/* ensure modal-close buttons remain visible on very small screens */
+.modal-inbox-close {
+  z-index: 2;
+  background: transparent;
+  border: none;
+}
+
+/* mobile: keep user-menu anchored to top-right instead of moving below */
+@media (max-width: 480px) {
+  .user-menu {
+    position: fixed;
+    top: 60px; /* berada di bawah header, tidak bottom sheet */
+    right: 10px;
+    left: auto;
+    width: calc(100% - 40px);
+    max-width: 320px;
+    border-radius: 8px;
+  }
+}
+
+/* tiny helper so dynamically created toast/notif don't hide behind modals */
+.toast-container,
+.notif-container {
+  z-index: 9000;
+}
+
+/* clean-up: make sure dynamically created elements fade a bit */
+.toast {
+  opacity: 1;
+  will-change: transform, opacity;
 }

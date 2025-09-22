@@ -121,32 +121,85 @@
   transform: translateY(-2px);
 }
 
+/* =======================
+   Chart + Progress Layout
+   ======================= */
+/* Wrapper flex */
+.chart-progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Chart lebih gede */
+.chart-progress-wrapper .chart-container {
+  flex: 0 0 180px;  /* chart fix width 180px */
+  height: 180px;    /* biar bulet rapi */
+}
+
+.chart-progress-wrapper .chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Progress container lebih proporsional */
+.chart-progress-wrapper .progress-container {
+  flex: 1; /* ambil sisa space */
+  max-width: 500px; /* batasi biar ga kepanjangan */
+}
+
+/* Progress group */
 .progress-group {
-    margin-bottom: 12px;
+  margin-bottom: 10px;
 }
-.progress-text {
-    font-weight: 500;
-    font-size: 13px;
+
+.progress-group .progress-text {
+  display: inline-block;
+  font-weight: 600;
+  margin-bottom: 3px;
 }
-.progress-number {
-    float: right;
-    font-size: 12px;
-    color: #666;
+
+.progress-group .progress-number {
+  float: right;
+  font-size: 13px;
+  color: #666;
 }
-.progress.sm {
-    height: 10px;
-    margin-top: 4px;
-    background: #f4f4f4;
-    border-radius: 5px;
-    overflow: hidden;
+
+.progress {
+  height: 12px;
+  border-radius: 6px;
+  background: #f1f1f1;
+  overflow: hidden;
 }
+
 .progress-bar {
-    height: 10px;
-    line-height: 10px;
-    color: #fff;
-    text-align: center;
-    transition: width 0.6s ease;
+  height: 100%;
+  border-radius: 6px;
 }
+
+
+/* =======================
+   Responsive Mobile
+   ======================= */
+@media (max-width: 768px) {
+  .chart-progress-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chart-container {
+    flex: none;
+    width: 120px;
+    height: 120px;
+  }
+
+  .progress-container {
+    width: 100%;
+  }
+}
+
 
 /* =============================
    RESPONSIVE PROGRESS BAR
@@ -478,8 +531,7 @@
   gap: 10px;
   background: #111;
   padding: 10px 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px #00ffff55;
+  border-radius: 10px;  
   margin-bottom: 20px;
 }
 
@@ -845,5 +897,43 @@
     width: 100%;
     text-align: center;
     font-size: 14px;
+  }
+}
+
+/* Chart container biar bulat */
+.user-content .chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;    /* atur max chart size */
+  aspect-ratio: 1 / 1; /* ✅ selalu persegi */
+  margin: 15px auto;
+}
+
+.user-content .chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Animasi */
+.user-content .chartjs-render-monitor {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .user-content .chart-wrapper {
+    max-width: 300px; /* lebih kecil di hp */
+  }
+}
+
+@media (max-width: 480px) {
+  .user-content .chart-wrapper {
+    max-width: 250px; /* biar muat di layar kecil */
   }
 }
