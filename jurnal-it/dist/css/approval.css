@@ -206,11 +206,10 @@ button.btn-reset-inline {
   background: #666;
 }
 
-
 /* ==== Buttons ==== */
 .btn-action {
     border: 1px solid var(--yellow) ;
-    background: rgba(45,47,52,0.8);
+    background: var(--dark);
     border-radius: 6px;
     padding: 6px 10px;
     cursor: pointer;
@@ -221,7 +220,7 @@ button.btn-reset-inline {
     gap: 6px;
     transition: all 0.3s ease;
     height: 32px;
-    color: var(--yellow) ;
+    color: var(--yellow);
 }
 .btn-action:hover {
     border-color: var(--cyan)  ;
@@ -244,7 +243,7 @@ button.btn-reset-inline {
 .btn-reject-static {
     background: var(--dark);
     color: var(--yellow) !important;
-    border: 1px solid cyan;
+    border: 1px solid cyan;                                                       
     width: 80px fit-content;
 }
 .btn-reject-static:hover { 
@@ -260,43 +259,63 @@ button.btn-reset-inline {
     -webkit-backdrop-filter: blur(8px);
     border-radius: 6px;
     margin-bottom: 14px;
-    padding: 15px 18px;
+    padding: 10px 13px;
     width: 100%;
     transition: all 0.3s ease;
     border-right: 1px solid gray;
     border-left: 1px solid gray;
     border-top: 1px solid gray;
     color: var(--yellow);
+    background-color: rgb(13, 33, 33);
+    overflow: hidden;
+
+    max-height: 0;               
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
 }
-.filter-panel:hover {
+.filter-panel:hover {   
     border-color: var(--cyan);
     box-shadow: 0 6px 18px rgba(0,234,255,0.15);
 }
-.filter-panel.closed { display: none; }
+.filter-panel.closed { 
+  max-height: 600px;          
+  opacity: 1;
+  padding-top: 10px;
+  padding-bottom: 13px;
+}
+/* .filter-panel.closed { display: block !important; } */
+
 .filter-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
+    display: flex !important;
+    padding-top: 0px;
+    justify-content: space-between !important;
+    margin-bottom: 12px;
     border-bottom: 1px solid var(--cyan);
 }
-
 .filter-header h3 {
-    margin: 0;
+    display: flex;
     color: var(--cyan);
     font-size: 15px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    gap: 7px;
+    margin-left: 10px;
     font-weight: 600;
     text-shadow: 0 0 6px rgba(0,234,255,0.4);
+    position: relative; /* supaya z-index berlaku */
+}
+.filter-header button {
+    background: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 /* Tombol reset inline (catatan date filter) */
 .btn-reset-inline {
   margin-left: 10px;
-  padding: 4px 10px;
+  padding: 5px 10px;
   font-size: 12px;
   border: 1px solid var(--cyan);
   border-radius: 4px;
@@ -311,27 +330,35 @@ button.btn-reset-inline {
   box-shadow: 0 0 6px rgba(0,234,255,0.3);
 }
 
-.modal-close {
-    background: none;
-    border: none;
-    color: var(--white);
-    font-size: 16px;
-    cursor: pointer;
-    padding: 2px;
+/* ==== FILTER BUTTON WRAPPER (Filter + Refresh) ==== */
+.filter-btn-row {
+  display: flex;
+  justify-content: space-between; /* kiri & kanan */
+  align-items: center;
+  padding: 0px 5px;
+  margin-bottom: 4px;
+  gap: 5px;
+  padding-top: 8px !important;
 }
 
-/* ==== Filter Body ==== */
-.filter-btn { 
-    padding: 12px 0px 0px 0px;
-    margin-bottom: 3px;
+/* tombol di dalam filter & refresh */
+.filter-btn button,
+.refresh-btn button {
+  display: flex;
+  align-items: center;
+  gap: 6px;               /* spasi icon & teks */
+  padding: 6px 12px; 
+  font-size: 13px;
+  line-height: 1.2;
 }
 
 .filter-body {
-    display: flex;
-    flex-wrap: nowrap;   /* jangan turun ke bawah */
-    gap: 20px;
-    align-items: flex-end; /* biar rata bawah */
-    margin-bottom: 12px;
+  display: flex;
+  flex-wrap: nowrap;  
+  gap: 20px;
+  align-items: flex-end;  
+  margin-bottom: 10px;
+  margin-left: 10px;
 }
 .filter-body input[type="date"],
 .filter-body input[type="time"] {
@@ -341,14 +368,18 @@ button.btn-reset-inline {
 .filter-row {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 7px !important;
     min-height: 60px;
 }
 .filter-row label {
     font-weight: 600;
     font-size: 12px;
     color: var(--cyan);
-    margin-bottom: 4px;
+    margin-bottom: 2px !important;
+}
+.filter-row select {
+  cursor: pointer;
+  background-color: #000 !important;
 }
 
 #filterDateStart,
@@ -378,7 +409,7 @@ button.btn-reset-inline {
 .time-range-field .inline-inputs {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 }
 .date-range-field input,
 .time-range-field input {
@@ -399,12 +430,26 @@ button.btn-reset-inline {
 .inline-inputs input {
     flex: 1;
     min-width: 0;
+    background-color: #000 !important;
 }
 .separator {
     color: var(--light);
     font-size: 12px;
     padding: 0 4px;
     white-space: nowrap;
+}
+#filterDateStart::-webkit-calendar-picker-indicator,
+#filterDateEnd::-webkit-calendar-picker-indicator,
+#filterTimeStart::-webkit-calendar-picker-indicator,
+#filterTimeEnd::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* bikin icon bawaan input jadi putih */
+  cursor: pointer;
+}
+/* catatan-khusus (date range) */
+#catatanDateStart::-webkit-calendar-picker-indicator,
+#catatanDateEnd::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 /* ==== Checkbox ==== */
@@ -432,7 +477,7 @@ button.btn-reset-inline {
     height: 16px;
     border: 1px solid rgba(0, 234, 255, 0.3);
     border-radius: 3px;
-    background: rgba(45,47,52,0.8);
+    background: rgb(91, 87, 87);
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
@@ -484,10 +529,10 @@ button.btn-reset-inline {
 /* ==== Filter Actions ==== */
 .filter-actions {
     display: flex;
-    gap: 8px;
-    margin-top: 7px;
-    padding-top: 8px;
-    padding-bottom: 9px;
+    gap: 5px !important;
+    margin-top: 3px;
+    padding-top: 3px;
+    padding-bottom: 8px;
     border-bottom: 1px solid var(--cyan);
     padding-right: 20px;
     justify-content: flex-end;
@@ -502,8 +547,8 @@ button.btn-reset-inline {
     border: 1px solid rgba(0, 234, 255, 0.139);
     overflow-x: auto;
     width: 100% !important;
-    padding: 10px 0px;
     transition: 0.3s;
+    padding: 10px 0px;
     border-bottom: 1px solid var(--cyan);
     border-left: 1px solid gray;
     border-right: 1px solid gray;
@@ -699,7 +744,7 @@ table.dataTable > tbody > tr.child td .dtr-title {
 .tabs {
     display: flex;
     gap: 8px;
-    margin: 10px 0;
+    margin-bottom: 10px;
     border-bottom: 2px solid cyan;
 }
 
@@ -709,7 +754,7 @@ table.dataTable > tbody > tr.child td .dtr-title {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    font-size: 13px !important;
+    font-size: 14px;
     font-weight: 600;
     color: var(--white);
     border-bottom: 3px solid transparent;
@@ -730,7 +775,7 @@ table.dataTable > tbody > tr.child td .dtr-title {
 /* ==== Tab Section ==== */
 .tab-section {
   display: none;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 .tab-section.active {
   display: block;
@@ -914,7 +959,6 @@ table.dataTable > tbody > tr.child td .dtr-title {
 #alasan:hover {
     border: 1px solid var(--yellow);
 }
-
  
 /* Animasi simple */
 @keyframes fadeIn {
@@ -960,6 +1004,7 @@ table.dataTable > tbody > tr.child td .dtr-title {
     flex-direction: column;   /* stack ke bawah */
     align-items: stretch;
     gap: 12px;
+    margin: 0% !important;
   }
 
   .filter-row {
@@ -978,11 +1023,14 @@ table.dataTable > tbody > tr.child td .dtr-title {
   .filter-actions {
     flex-direction: row;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
+    padding-right: 0% !important;
   }
 
   .filter-actions .btn-action {
     flex: 1; /* tombol full */
+    width: 100%;
+    justify-content: center !important;
   }
 
   .container {
@@ -995,9 +1043,16 @@ table.dataTable > tbody > tr.child td .dtr-title {
   .table-container {
     width: 100% !important;       /* paksa full */
     margin: 0 !important;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
     box-sizing: border-box;
+  }
+
+  /* biar kelihatan iconnya waktu mau dibuka (khusus data tabel yg datanya tersembunyi/display mobile/tablet) */
+  .dtr-control::before {
+    color: yellow !important;   /* ubah warna tanda plus/minus jadi putih */
+    background: none !important; /* biar ga ada latar */
+    border-color: yellow !important; /* kalau mau lingkarannya ikut putih */
   }
 
   /* biar datatables wrapper ga kepotong */
@@ -1020,8 +1075,58 @@ table.dataTable > tbody > tr.child td .dtr-title {
 
 /* Mobile phones (<=480px) */
 @media (max-width: 480px) {
+  body,
+  .filter-body,
+  .inline-inputs,
+  .controls-row,
+  .catatan-date-filter,
+  .dataTables_length,
+  .dataTables_filter,
+  .filter-actions,
+  .modal-content,
+  .tabs,
+  #filterPanel,
+  #catatanTable,
+  #approvalTable {
+    font-size: 12px !important; /* default kecil */
+    line-height: 1.3;
+  }
+  /* Input, select, dan button juga ikut lebih kecil */
+  input,
+  select,
+  button {
+    font-size: 11px !important;
+    padding: 4px 6px;
+  }
+  /* Label di form */
+  label {
+    font-size: 11px !important;
+  }
+
+  .header {
+    padding: 10px 0px !important;
+  }
+
+  h1 {
+    font-size: 16px !important;
+  }
+ 
+  h2, h3, h4, h5, div {
+    font-size: 11px !important;
+  }
+
+  .stat-value,
+  .stat-label {
+    font-size: 11px !important;
+  }
+
+  select {
+    min-height: 28px;
+  }
+
   .filter-body {
     gap: 10px;
+    margin: 0% !important;
   }
 
   .inline-inputs {
@@ -1029,13 +1134,47 @@ table.dataTable > tbody > tr.child td .dtr-title {
     gap: 6px;
   }
 
+  .dtr-data button {
+    justify-content: end !important;
+  }
+
+  .controls-row {
+    gap: 0% !important;
+    width: 100%;
+  }
+
+  .catatan-date-filter {
+    padding-top: 10px;
+    display: flex;
+  }
+  .catatan-date-filter label, button {
+    margin: 0% !important;
+  }
+
+  .dataTables_length,
+  .dataTables_filter {
+    padding: 0% !important;
+  }
+ 
+  #catatanTable_filter input,
+  #approvalTable_filter input {
+    margin: 0% !important;
+  }
+  #catatanTable_filter label,
+  #approvalTable_filter label {
+    width: fit-content !important;
+    text-align: start;
+  }
+
   .filter-actions {
     flex-direction: column;
     gap: 8px;
+    padding-right: 0% !important;
   }
 
   .filter-actions .btn-action {
     width: 100%;
+    justify-content: center !important;
   }
 
   .modal-content {
@@ -1071,4 +1210,30 @@ table.dataTable > tbody > tr.child td .dtr-title {
   .tabs {
     justify-content: center;
   }
+  .tabs button {
+    font-size: 12px !important;
+  }
+
+  .filter-btn button,
+  .refresh-btn button {
+    width: 100%;              
+    justify-content: center;  
+    padding: 3px 5px;   
+    font-size: 10px !important;       
+    margin-top: 0 !important;
+  }
+
+  .dtr-data {
+    width: 100%;
+  }
+  .dtr-data button {
+    width: 100% !important;   
+    text-align: center !important;        
+    justify-content: center !important;  
+  }
+  .btn-approve-static,
+  .btn-approve-catatan {
+    margin-bottom: 3px !important;
+  }
 } 
+ 
