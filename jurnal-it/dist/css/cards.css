@@ -1,13 +1,14 @@
 .card-container {
   display: flex;
+  flex-direction: row !important;
   flex-wrap: wrap;
-  gap: 25px;
+  gap: 20px;
   justify-content: center;
   margin-bottom: 2rem;
 }
 
 .card-report {
-  width: 400px;
+  width: 380px;
   height: 260px;
   background: var(--gray);
   border-radius: 10px;
@@ -20,7 +21,7 @@
 }
  
 .card-stats {
-  width: 365px;
+  width: 360px;
   height: 150px;
   background: var(--gray);
   border-radius: 10px;
@@ -34,7 +35,7 @@
 }
 
 .card-status {
-  width: 365px; 
+  width: 380px; 
   height: 170px;
   background: var(--gray);
   border-radius: 10px;
@@ -48,7 +49,7 @@
 }
 
 .card-outstanding {
-  width: 370px;
+  width: 365px;
   height: 260px;
   background: var(--gray);
   border-radius: 10px;
@@ -76,6 +77,11 @@
     background: cyan;
     border-radius: 4px;
 }
+
+.reports-container { padding: 6px !important; }
+.report-title { padding-bottom: 6px !important; }
+.report-footer { font-size: 12px !important; }
+.report-meta { gap: 4px !important; }
 
 .card-footer {
   background-color: var(--cyan);
@@ -191,7 +197,6 @@
     background: rgb(11, 240, 240);
 }
 
-
 .card:hover { transform: translateY(-5px); }
 
 .card-header {
@@ -203,9 +208,10 @@
   flex-shrink: 0;
   position: sticky;
   top: 0;
- justify-content: space-between;
+  justify-content: space-between; 
+  font-size: 15px;
 }
-.text-pending-total {
+.text-pending-total, abbr {
  font-size: 13px;
  color: black;
  padding-top: 2px;
@@ -243,6 +249,10 @@
   gap: 0.8rem;
   width: 100%;
 }
+.vertical-buttons .card-link {
+  flex: 1;         /* setiap link bagi rata lebar */
+  text-decoration: none;
+}
 
 .vertical-buttons .search-card { width: 100%; transition: transform 0.2s ease; height: 95px;}
 .vertical-buttons .search-card:hover { transform: translateY(-3px); }
@@ -261,7 +271,6 @@
   border: 2px solid transparent;
   box-shadow: 0 2px 8px rgba(255,235,59,0.2);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-  position: relative;
   overflow: hidden;
 }
 
@@ -366,7 +375,6 @@
 }
 
 
-
 /* Responsive */
 @media (max-width: 768px) {
   .card { width: 100%; }
@@ -379,3 +387,32 @@
   .search-card i { font-size: 1.8rem; }
   .search-card div { font-size: 1rem; }
 }
+
+@media (max-width: 480px) {
+  /* Semua card full width + tinggi menyesuaikan */
+  .card-report, .card-stats, .card-status, .card-outstanding {
+    width: 100% !important;
+    height: auto !important; /* isi menentukan tinggi */
+    margin-bottom: 12px;
+  }
+  .card-footer, div, .label, .text-pending-total {
+    font-size: 13px !important; 
+  }
+  .text-pending-total, abbr {
+    font-size: 12px !important;
+  }
+
+  .report-title { font-size: 12px !important; }
+  .report-meta { font-size: 11px !important;}
+
+  /* Avatar + user info lebih kecil */
+  .user-avatar { width: 16px; height: 16px; }
+  .user-name { font-size: 12px; max-width: 100px; }
+  .user-date { font-size: 11px; }
+
+  /* Search card lebih compact */
+  .search-card { padding: 0.8rem; gap: 0.4rem; }
+  .search-card i { font-size: 1.3rem; }
+  .search-card div { font-size: 0.85rem; }
+}
+
