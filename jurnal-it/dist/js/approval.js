@@ -310,6 +310,15 @@ $(document).ready(function () {
     $('#toggleFilterBtn').on('click', function (e) { e.stopPropagation(); panel.toggleClass('closed'); });
     $('.modal-close').on('click', function (e) { e.stopPropagation(); panel.addClass('closed'); });
 
+    // buka panel otomatis kalau default tab aktif = Approval
+    if ($('#approvalSection').hasClass('active')) {
+        panel.removeClass('closed');
+        $('#toggleFilterBtn').show();
+    } else {
+        panel.addClass('closed');
+        $('#toggleFilterBtn').hide();
+    }
+
     // ==================================================
     // REJECT MODAL
     // ==================================================
@@ -367,5 +376,6 @@ $(document).ready(function () {
     table.draw();
     if (catatanTable) catatanTable.draw();
 });
+
 
 
