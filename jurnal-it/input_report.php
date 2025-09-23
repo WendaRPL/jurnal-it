@@ -16,6 +16,7 @@ ob_start();
 <link rel="stylesheet" href="dist/css/input-laporan.css">
 
 <?php if (isset($_GET['msg'])): ?>
+<div class="notif-container">
   <div class="notif <?= htmlspecialchars($_GET['msg']) ?>">
     <?php if ($_GET['msg'] === 'created'): ?>
       <i class="fas fa-check-circle"></i> Laporan berhasil dibuat.
@@ -29,6 +30,7 @@ ob_start();
       <i class="fas fa-exclamation-triangle"></i> Permintaan tidak valid.
     <?php endif; ?>
   </div>
+</div>
 <?php endif; ?>
 
 
