@@ -315,8 +315,3 @@ require_once "direct/config.php"; // koneksi database
     <?php endif; ?>
     </div>
 </div>
-
-    
-
-
-
