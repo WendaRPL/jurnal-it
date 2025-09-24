@@ -24,13 +24,7 @@ if ($role_id == 3) {
     // Staff (role 3) tidak boleh masuk approval
     header("Location: riwayat.php");
     exit;
-} elseif ($role_id == 2) {
-    // Supervisor hanya lihat staff, exclude dirinya
-    $whereRole = " AND u.role_id = 3 AND u.id != {$user_id}";
-} elseif ($role_id == 1) {
-    // Admin hanya lihat supervisor
-    $whereRole = " AND u.role_id = 2";
-}
+} 
 
 // ===================
 // QUERY USER + TOTAL PENDING + LAST DATE
@@ -334,8 +328,8 @@ while ($result_catatan && $row = $result_catatan->fetch_assoc()) {
                                 <td>{$row['date']}</td>
                                 <td>{$row['deskripsi']}</td>
                                 <td>
-                                    <button class='btn-action btn-approve-catatan' data-type='catatan' data-id='{$row['id']}'>✔ Approve</button>
-                                    <button class='btn-action btn-reject-catatan' data-type='catatan' data-id='{$row['id']}'>✖ Tolak</button>
+                                    <button class='btn-action btn-approve' data-id='<?= $row[id] ?>' data-type='<?= $type ?>'>✔ Approve</button>
+                                    <button class='btn-action btn-reject' data-id='<?= $row[id] ?>' data-type='<?= $type ?>'>✖ Tolak</button>
                                 </td>
                             </tr>";
                             $no++;
@@ -353,7 +347,7 @@ while ($result_catatan && $row = $result_catatan->fetch_assoc()) {
   <div class="modal-content">
     <span style="color:white;" class="close">&times;</span>
     <h2>Alasan Penolakan</h2>
-    <form class="form-reject" id="rejectForm" method="POST" action="update_status.php">
+    <form class="form-reject" id="rejectForm">
         <input type="hidden" id="rejectId" name="id">
         <input type="hidden" id="rejectType" name="type">
         <textarea id="alasan" name="alasan" placeholder="Tuliskan alasan penolakan..." required></textarea>
@@ -361,6 +355,14 @@ while ($result_catatan && $row = $result_catatan->fetch_assoc()) {
     </form>
   </div>
 </div>
+
+<form id="actionForm" method="POST" action="direct/update_approved.php" style="display:none;">
+    <input type="hidden" name="id" id="formId">
+    <input type="hidden" name="type" id="formType">
+    <input type="hidden" name="action" id="formAction">
+    <input type="hidden" name="alasan" id="formAlasan">
+</form>
+
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
